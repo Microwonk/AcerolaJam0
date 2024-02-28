@@ -6,7 +6,7 @@ on:
       # - "feature/**"
 env:
   GODOT_VERSION: 4.2.1
-  EXPORT_NAME: godot-game-template
+  EXPORT_NAME: AcerolaJam0
   ITCH_IO: true
 
 jobs:
