@@ -5,24 +5,33 @@ class_name Player
 signal jumped(is_ground_jump: bool)
 signal hit_ground()
 
-@export var input_left : String = "move_left"
+@export var input_left: String = "move_left"
 ## Name of input action to move right.
-@export var input_right : String = "move_right"
+@export var input_right: String = "move_right"
 ## Name of input action to jump.
-@export var input_jump : String = "jump"
+@export var input_jump: String = "jump"
+@export var input_sneak: String = "sneak"
+@export var input_light: String = "light"
 
-const DEFAULT_MAX_JUMP_HEIGHT = 60
-const DEFAULT_MIN_JUMP_HEIGHT = 30
-const DEFAULT_DOUBLE_JUMP_HEIGHT = 100
-const DEFAULT_JUMP_DURATION = 0.3
+const DEFAULT_MAX_JUMP_HEIGHT: int = 60
+const DEFAULT_MIN_JUMP_HEIGHT: int = 30
+const DEFAULT_DOUBLE_JUMP_HEIGHT: int = 100
+const DEFAULT_JUMP_DURATION: float = 0.3
+
+const light_deactivated_size := 0.2
+const light_activated_size := 2
 
 enum PlayerState { 
 	IDLE, 
 	WALKING, 
 	RUNNING, 
-	JUMPING_GROUND, 
-	JUMPING_AIR, 
+	JUMPING, 
 	FALLING 
+}
+
+enum LookingState {
+	RIGHT,
+	LEFT
 }
 
 var _max_jump_height: float = DEFAULT_MAX_JUMP_HEIGHT
@@ -38,7 +47,6 @@ var _max_jump_height: float = DEFAULT_MAX_JUMP_HEIGHT
 		double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
 		release_gravity_multiplier = calculate_release_gravity_multiplier(
 				jump_velocity, min_jump_height, default_gravity)
-			
 
 var _min_jump_height: float = DEFAULT_MIN_JUMP_HEIGHT
 ## The minimum jump height (tapping jump).
@@ -50,20 +58,15 @@ var _min_jump_height: float = DEFAULT_MIN_JUMP_HEIGHT
 		release_gravity_multiplier = calculate_release_gravity_multiplier(
 				jump_velocity, min_jump_height, default_gravity)
 
-
-
 var _double_jump_height: float = DEFAULT_DOUBLE_JUMP_HEIGHT
-## The height of your jump in the air.
 @export var double_jump_height: float = DEFAULT_DOUBLE_JUMP_HEIGHT:
 	get:
 		return _double_jump_height
 	set(value):
 		_double_jump_height = value
 		double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
-		
 
 var _jump_duration: float = DEFAULT_JUMP_DURATION
-## How long it takes to get to the peak of the jump in seconds.
 @export var jump_duration: float = DEFAULT_JUMP_DURATION:
 	get:
 		return _jump_duration
@@ -76,31 +79,22 @@ var _jump_duration: float = DEFAULT_JUMP_DURATION
 		release_gravity_multiplier = calculate_release_gravity_multiplier(
 				jump_velocity, min_jump_height, default_gravity)
 		
-## Multiplies the gravity by this while falling.
 @export var falling_gravity_multiplier = 1.5
-## Amount of jumps allowed before needing to touch the ground again. Set to 2 for double jump.
 @export var max_jump_amount = 1
-@export var max_acceleration = 4000
+@export var max_acceleration = 3000
 @export var friction = 20
-@export var can_hold_jump : bool = false
-## You can still jump this many seconds after falling off a ledge.
-@export var coyote_time : float = 0.1
-## Pressing jump this many seconds before hitting the ground will still make you jump.
-## Only neccessary when can_hold_jump is unchecked.
-@export var jump_buffer : float = 0.1
+@export var can_hold_jump: bool = false
+@export var coyote_time: float = 0.1
+@export var jump_buffer: float = 0.1
 
+var default_gravity: float
+var jump_velocity: float
+var double_jump_velocity: float
+var release_gravity_multiplier: float
 
-# These will be calcualted automatically
-# Gravity will be positive if it's going down, and negative if it's going up
-var default_gravity : float
-var jump_velocity : float
-var double_jump_velocity : float
-# Multiplies the gravity by this when we release jump
-var release_gravity_multiplier : float
-
-
-var jumps_left : int
+var jumps_left: int
 var holding_jump := false
+var sneaking := false
 
 enum JumpType {NONE, GROUND, AIR}
 ## The type of jump the player is performing. Is JumpType.NONE if they player is on the ground.
@@ -111,12 +105,14 @@ var _was_on_ground: bool
 
 var acc = Vector2()
 
+var state: PlayerState = PlayerState.IDLE
+var looking_state: LookingState = LookingState.RIGHT
+
 # coyote_time and jump_buffer must be above zero to work. Otherwise, godot will throw an error.
 @onready var is_coyote_time_enabled = coyote_time > 0
 @onready var is_jump_buffer_enabled = jump_buffer > 0
 @onready var coyote_timer = Timer.new()
 @onready var jump_buffer_timer = Timer.new()
-
 
 func _init():
 	default_gravity = calculate_gravity(max_jump_height, jump_duration)
@@ -124,7 +120,6 @@ func _init():
 	double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
 	release_gravity_multiplier = calculate_release_gravity_multiplier(
 			jump_velocity, min_jump_height, default_gravity)
-
 
 func _ready():
 	$AnimatedSprite2D.play()
@@ -137,23 +132,21 @@ func _ready():
 		add_child(jump_buffer_timer)
 		jump_buffer_timer.wait_time = jump_buffer
 		jump_buffer_timer.one_shot = true
-
+		
+func _process(delta):
+	classify_state()
+	animation()
 
 func _input(_event):
+	if Input.is_action_just_pressed(input_light):
+		$PlayerLight.texture_scale = light_deactivated_size if $PlayerLight.texture_scale == light_activated_size else light_activated_size
+	
 	acc.x = 0
 	if Input.is_action_pressed(input_left):
-		$AnimatedSprite2D.flip_h = true
 		acc.x = -max_acceleration
 	
 	if Input.is_action_pressed(input_right):
-		$AnimatedSprite2D.flip_h = false
 		acc.x = max_acceleration
-		
-	if abs(acc.x) > 500:
-		$AnimatedSprite2D.play("walk")
-		
-	if abs(acc.x) > 1000:
-		$AnimatedSprite2D.play("run")
 	
 	if Input.is_action_just_pressed(input_jump):
 		holding_jump = true
@@ -163,7 +156,12 @@ func _input(_event):
 		
 	if Input.is_action_just_released(input_jump):
 		holding_jump = false
-
+		
+	if Input.is_action_pressed(input_sneak):
+		sneaking = true
+		acc.x /= 2
+	else:
+		sneaking = false
 
 func _physics_process(delta):
 	if is_coyote_timer_running() or current_jump_type == JumpType.NONE:
@@ -176,10 +174,7 @@ func _physics_process(delta):
 		current_jump_type = JumpType.NONE
 		if is_jump_buffer_timer_running() and not can_hold_jump: 
 			jump()
-		
-		$AnimatedSprite2D.play("idle")
-		hit_ground.emit()
-	
+		hit_ground.emit()	
 	
 	# Cannot do this in _input because it needs to be checked every frame
 	if Input.is_action_pressed(input_jump):
@@ -192,12 +187,51 @@ func _physics_process(delta):
 	# Apply friction
 	velocity.x *= 1 / (1 + (delta * friction))
 	velocity += acc * delta
-	
-	
+		
 	_was_on_ground = is_feet_on_ground()
 	move_and_slide()
+	
+	classify_state()
+	animation()
 
-
+func classify_state():
+	if velocity.x < 0:
+		looking_state = LookingState.LEFT
+	elif velocity.x > 0:
+		looking_state = LookingState.RIGHT
+	# stay on zero velocity	
+	
+	if velocity.x == 0:
+		state = PlayerState.IDLE
+	if abs(velocity.x) > 0:
+		if sneaking:
+			state = PlayerState.WALKING
+		else:
+			state = PlayerState.RUNNING
+	if velocity.y < 0:
+		state = PlayerState.JUMPING
+	if velocity.y > 0 and not is_feet_on_ground():
+		state = PlayerState.FALLING
+		
+func animation():
+	match looking_state:
+		LookingState.RIGHT:
+			$AnimatedSprite2D.flip_h = false
+		LookingState.LEFT:
+			$AnimatedSprite2D.flip_h = true
+		
+	match state:
+		PlayerState.JUMPING:
+			$AnimatedSprite2D.animation = "jump"
+		PlayerState.WALKING:
+			$AnimatedSprite2D.animation = "walk"
+		PlayerState.RUNNING:
+			$AnimatedSprite2D.animation = "run"
+		PlayerState.IDLE:
+			$AnimatedSprite2D.animation = "idle"
+		PlayerState.FALLING:
+			$AnimatedSprite2D.animation = "fall"
+		
 ## Use this instead of coyote_timer.start() to check if the coyote_timer is enabled first
 func start_coyote_timer():
 	if is_coyote_time_enabled:
