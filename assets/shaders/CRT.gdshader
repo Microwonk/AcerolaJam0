@@ -1,6 +1,6 @@
 /*
 Shader from Godot Shaders - the free shader library.
-godotshaders.com/shader/VHS-and-CRT-monitor-effect
+based on this Shader: godotshaders.com/shader/VHS-and-CRT-monitor-effect
 
 This shader is under CC0 license. Feel free to use, improve and 
 change this shader according to your needs and consider sharing 
@@ -9,42 +9,26 @@ the modified result to godotshaders.com.
 
 shader_type canvas_item;
 
-//*** IMPORTANT! ***/ 
-// - If you are using this shader to affect the node it is applied to set 'overlay' to false (unchecked in the instepctor).
-// - If you are using this shader as an overlay, and want the shader to affect the nodes below in the Scene hierarchy,
-//   set 'overlay' to true (checked in the inspector).
-// On Mac there is potentially a bug causing this to not work properly. If that is the case and you want to use the shader as an overlay
-// change all "overlay ? SCREEN_TEXTURE : TEXTURE" to only "SCREEN_TEXTURE" on lines 129-140, and "vec2 uv = overlay ? warp(SCREEN_UV) : warp(UV);"
-// to "vec2 uv = warp(SCREEN_UV);" on line 98.
-uniform bool overlay = false;
+const float scanlines_opacity = 0.5;
+const float scanlines_width = 0.5;
+const vec2 resolution = vec2(720.0, 480.0); // Set the number of rows and columns the texture will be divided in. Scanlines and grille will make a square based on these values
 
-uniform float scanlines_opacity : hint_range(0.0, 1.0) = 0.4;
-uniform float scanlines_width : hint_range(0.0, 0.5) = 0.25;
-uniform float grille_opacity : hint_range(0.0, 1.0) = 0.3;
-uniform vec2 resolution = vec2(640.0, 480.0); // Set the number of rows and columns the texture will be divided in. Scanlines and grille will make a square based on these values
+const float roll_speed = 2.0; // Positive values are down, negative are up
+const float roll_size = 2.0;
+const float roll_variation = 1.8; // This valie is not an exact science. You have to play around with the value to find a look you like. How this works is explained in the code below.
+const float distort_intensity = 0.02; // The distortion created by the rolling effect.
 
-uniform bool pixelate = true; // Fill each square ("pixel") with a sampled color, creating a pixel look and a more accurate representation of how a CRT monitor would work.
+const float noise_opacity = 0.04;
+const float noise_speed = 5.0; // There is a movement in the noise pattern that can be hard to see first. This sets the speed of that movement.
 
-uniform bool roll = true;
-uniform float roll_speed = 8.0; // Positive values are down, negative are up
-uniform float roll_size : hint_range(0.0, 100.0) = 15.0;
-uniform float roll_variation : hint_range(0.1, 5.0) = 1.8; // This valie is not an exact science. You have to play around with the value to find a look you like. How this works is explained in the code below.
-uniform float distort_intensity : hint_range(0.0, 0.2) = 0.05; // The distortion created by the rolling effect.
+const float static_noise_intensity = 0.04;
 
-uniform float noise_opacity : hint_range(0.0, 1.0) = 0.4;
-uniform float noise_speed = 5.0; // There is a movement in the noise pattern that can be hard to see first. This sets the speed of that movement.
+const float brightness = 1.0; // When adding scanline gaps and grille the image can get very dark. Brightness tries to compensate for that.
 
-uniform float static_noise_intensity : hint_range(0.0, 1.0) = 0.06;
+const float warp_amount = 5.0; // Warp the texture edges simulating the curved glass of a CRT monitor or old TV.
 
-uniform float aberration : hint_range(-1.0, 1.0) = 0.03; // Chromatic aberration, a distortion on each color channel.
-uniform float brightness = 1.4; // When adding scanline gaps and grille the image can get very dark. Brightness tries to compensate for that.
-uniform bool discolor = true; // Add a discolor effect simulating a VHS
-
-uniform float warp_amount :hint_range(0.0, 5.0) = 1.0; // Warp the texture edges simulating the curved glass of a CRT monitor or old TV.
-uniform bool clip_warp = false;
-
-uniform float vignette_intensity = 0.4; // Size of the vignette, how far towards the middle it should go.
-uniform float vignette_opacity : hint_range(0.0, 1.0) = 0.5;
+const float vignette_intensity = 0.4; // Size of the vignette, how far towards the middle it should go.
+const float vignette_opacity = 1.0;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
 // Used by the noise functin to generate a pseudo random value between 0.0 and 1.0
@@ -96,22 +80,15 @@ float vignette(vec2 uv){
 
 void fragment()
 {
-	vec2 uv = overlay ? warp(SCREEN_UV) : warp(UV); // Warp the uv. uv will be used in most cases instead of UV to keep the warping
+	vec2 uv = warp(UV);
 	vec2 text_uv = uv;
 	vec2 roll_uv = vec2(0.0);
-	float time = roll ? TIME : 0.0;
-	
-
-	// Pixelate the texture based on the given resolution.
-	if (pixelate)
-	{
-		text_uv = ceil(uv * resolution) / resolution;
-	}
+	float time = TIME;
 	
 	// Create the rolling effect. We need roll_line a bit later to make the noise effect.
 	// That is why this runs if roll is true OR noise_opacity is over 0.
 	float roll_line = 0.0;
-	if (roll || noise_opacity > 0.0)
+	if (noise_opacity > 0.0)
 	{
 		// Create the areas/lines where the texture will be distorted.
 		roll_line = smoothstep(0.3, 0.9, sin(uv.y * roll_size - (time * roll_speed) ) );
@@ -122,46 +99,19 @@ void fragment()
 	}
 	
 	vec4 text;
-	if (roll)
-	{
-		// If roll is true distort the texture with roll_uv. The texture is split up into RGB to 
-		// make some chromatic aberration. We apply the aberration to the red and green channels accorging to the aberration parameter
-		// and intensify it a bit in the roll distortion.
-		text.r = texture(SCREEN_TEXTURE, text_uv + roll_uv * 0.8 + vec2(aberration, 0.0) * .1).r;
-		text.g = texture(SCREEN_TEXTURE, text_uv + roll_uv * 1.2 - vec2(aberration, 0.0) * .1 ).g;
-		text.b = texture(SCREEN_TEXTURE, text_uv + roll_uv).b;
-		text.a = 1.0;
-	}
-	else
-	{
-		// If roll is false only apply the aberration without any distorion. The aberration values are very small so the .1 is only 
-		// to make the slider in the Inspector less sensitive.
-		text.r = texture(SCREEN_TEXTURE, text_uv + vec2(aberration, 0.0) * .1).r;
-		text.g = texture(SCREEN_TEXTURE, text_uv - vec2(aberration, 0.0) * .1).g;
-		text.b = texture(SCREEN_TEXTURE, text_uv).b;
-		text.a = 1.0;
-	}
+	// If roll is true distort the texture with roll_uv. The texture is split up into RGB to 
+	// make some chromatic aberration. We apply the aberration to the red and green channels accorging to the aberration parameter
+	// and intensify it a bit in the roll distortion.
+	text.r = texture(SCREEN_TEXTURE, text_uv + roll_uv * 0.8).r;
+	text.g = texture(SCREEN_TEXTURE, text_uv + roll_uv * 1.2).g;
+	text.b = texture(SCREEN_TEXTURE, text_uv + roll_uv).b;
+	text.a = 1.0;
 	
 	float r = text.r;
 	float g = text.g;
 	float b = text.b;
 	
 	uv = warp(UV);
-	
-	// CRT monitors don't have pixels but groups of red, green and blue dots or lines, called grille. We isolate the texture's color channels 
-	// and divide it up in 3 offsetted lines to show the red, green and blue colors next to each other, with a small black gap between.
-	if (grille_opacity > 0.0){
-		
-		float g_r = smoothstep(0.85, 0.95, abs(sin(uv.x * (resolution.x * 3.14159265))));
-		r = mix(r, r * g_r, grille_opacity);
-		
-		float g_g = smoothstep(0.85, 0.95, abs(sin(1.05 + uv.x * (resolution.x * 3.14159265))));
-		g = mix(g, g * g_g, grille_opacity);
-		
-		float b_b = smoothstep(0.85, 0.95, abs(sin(2.1 + uv.x * (resolution.x * 3.14159265))));
-		b = mix(b, b * b_b, grille_opacity);
-		
-	}
 	
 	// Apply the grille to the texture's color channels and apply Brightness. Since the grille and the scanlines (below) make the image very dark you
 	// can compensate by increasing the brightness.
@@ -206,25 +156,7 @@ void fragment()
 	text.rgb *= border(uv);
 	text.rgb *= vignette(uv);
 	// Hides the black border and make that area transparent. Good if you want to add the the texture on top an image of a TV or monitor.
-	if (clip_warp)
-	{
-		text.a = border(uv);
-	}
-	
-	// Apply discoloration to get a VHS look (lower saturation and higher contrast)
-	// You can play with the values below or expose them in the Inspector.
-	float saturation = 0.5;
-	float contrast = 1.2;
-	if (discolor)
-	{
-		// Saturation
-		vec3 greyscale = vec3(text.r + text.g + text.b) / 3.;
-		text.rgb = mix(text.rgb, greyscale, saturation);
-		
-		// Contrast
-		float midpoint = pow(0.5, 2.2);
-		text.rgb = (text.rgb - vec3(midpoint)) * contrast + midpoint;
-	}
+	text.a = border(uv);
 	
 	COLOR = text;
 }

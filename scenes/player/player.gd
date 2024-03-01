@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+# TODO fix coyote timer
 class_name Player
 
 signal jumped(is_ground_jump: bool)
@@ -13,7 +14,6 @@ signal hit_ground()
 
 const DEFAULT_MAX_JUMP_HEIGHT: int = 60
 const DEFAULT_MIN_JUMP_HEIGHT: int = 30
-const DEFAULT_DOUBLE_JUMP_HEIGHT: int = 100
 const DEFAULT_JUMP_DURATION: float = 0.3
 
 const LIGHT_DEACTIVATED_SIZE := 0.2
@@ -38,12 +38,6 @@ enum Light {
 	OFF
 }
 
-enum JumpType {
-	NONE,
-	GROUND, 
-	AIR
-}
-
 var _max_jump_height := DEFAULT_MAX_JUMP_HEIGHT
 @export var max_jump_height: float = DEFAULT_MAX_JUMP_HEIGHT: 
 	get:
@@ -53,7 +47,6 @@ var _max_jump_height := DEFAULT_MAX_JUMP_HEIGHT
 	
 		default_gravity = calculate_gravity(_max_jump_height, jump_duration)
 		jump_velocity = calculate_jump_velocity(_max_jump_height, jump_duration)
-		double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
 		release_gravity_multiplier = calculate_release_gravity_multiplier(
 				jump_velocity, min_jump_height, default_gravity)
 
@@ -66,14 +59,6 @@ var _min_jump_height: float = DEFAULT_MIN_JUMP_HEIGHT
 		release_gravity_multiplier = calculate_release_gravity_multiplier(
 				jump_velocity, min_jump_height, default_gravity)
 
-var _double_jump_height: float = DEFAULT_DOUBLE_JUMP_HEIGHT
-@export var double_jump_height: float = DEFAULT_DOUBLE_JUMP_HEIGHT:
-	get:
-		return _double_jump_height
-	set(value):
-		_double_jump_height = value
-		double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
-
 var _jump_duration: float = DEFAULT_JUMP_DURATION
 @export var jump_duration: float = DEFAULT_JUMP_DURATION:
 	get:
@@ -83,27 +68,22 @@ var _jump_duration: float = DEFAULT_JUMP_DURATION
 	
 		default_gravity = calculate_gravity(max_jump_height, jump_duration)
 		jump_velocity = calculate_jump_velocity(max_jump_height, jump_duration)
-		double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
 		release_gravity_multiplier = calculate_release_gravity_multiplier(
 				jump_velocity, min_jump_height, default_gravity)
 		
 @export var falling_gravity_multiplier = 1.5
-@export var max_jump_amount = 1
 @export var max_acceleration = 3000
 @export var friction = 20
 @export var can_hold_jump: bool = false
-@export var coyote_time: float = 0.1
+@export var coyote_time: float = 1.0
 @export var jump_buffer: float = 0.1
 
 var default_gravity: float
 var jump_velocity: float
 var double_jump_velocity: float
 var release_gravity_multiplier: float
-
-var jumps_left: int
 var holding_jump := false
 var sneaking := false
-
 var _was_on_ground: bool
 var acc = Vector2()
 
@@ -111,34 +91,28 @@ var acc = Vector2()
 var state: PlayerState = PlayerState.IDLE
 var looking_state: LookingState = LookingState.RIGHT
 var light_state: Light = Light.OFF
-var current_jump_type: JumpType = JumpType.NONE
+var jumping = false
 
-# coyote_time and jump_buffer must be above zero to work. Otherwise, godot will throw an error.
-@onready var is_coyote_time_enabled = coyote_time > 0
-@onready var is_jump_buffer_enabled = jump_buffer > 0
 @onready var coyote_timer = Timer.new()
 @onready var jump_buffer_timer = Timer.new()
 
 func _init():
 	default_gravity = calculate_gravity(max_jump_height, jump_duration)
 	jump_velocity = calculate_jump_velocity(max_jump_height, jump_duration)
-	double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
 	release_gravity_multiplier = calculate_release_gravity_multiplier(
 			jump_velocity, min_jump_height, default_gravity)
 
 func _ready():
 	$AnimatedSprite2D.play()
-	if is_coyote_time_enabled:
-		add_child(coyote_timer)
-		coyote_timer.wait_time = coyote_time
-		coyote_timer.one_shot = true
+	add_child(coyote_timer)
+	coyote_timer.wait_time = coyote_time
+	coyote_timer.one_shot = true
 	
-	if is_jump_buffer_enabled:
-		add_child(jump_buffer_timer)
-		jump_buffer_timer.wait_time = jump_buffer
-		jump_buffer_timer.one_shot = true
+	add_child(jump_buffer_timer)
+	jump_buffer_timer.wait_time = jump_buffer
+	jump_buffer_timer.one_shot = true
 		
-func _process(delta):
+func _process(_delta):
 	classify_state()
 	animation()
 
@@ -158,7 +132,7 @@ func _input(_event):
 	if Input.is_action_just_pressed(input_jump):
 		holding_jump = true
 		start_jump_buffer_timer()
-		if (not can_hold_jump and can_ground_jump()) or can_double_jump():
+		if !can_hold_jump and can_jump():
 			jump()
 		
 	if Input.is_action_just_released(input_jump):
@@ -172,21 +146,21 @@ func _input(_event):
 
 # movement
 func _physics_process(delta):
-	if is_coyote_timer_running() or current_jump_type == JumpType.NONE:
-		jumps_left = max_jump_amount
-	if is_feet_on_ground() and current_jump_type == JumpType.NONE:
+	print(is_on_floor())
+	if !is_on_floor() and !jumping:
 		start_coyote_timer()
+		print(coyote_timer.time_left)		
 		
 	# Check if we just hit the ground this frame
-	if not _was_on_ground and is_feet_on_ground():
-		current_jump_type = JumpType.NONE
+	if not _was_on_ground and is_on_floor():
+		jumping = false
 		if is_jump_buffer_timer_running() and not can_hold_jump: 
 			jump()
 		hit_ground.emit()	
 	
 	# Cannot do this in _input because it needs to be checked every frame
 	if Input.is_action_pressed(input_jump):
-		if can_ground_jump() and can_hold_jump:
+		if can_jump() and can_hold_jump:
 			jump()
 	
 	var gravity = apply_gravity_multipliers_to(default_gravity)
@@ -196,7 +170,7 @@ func _physics_process(delta):
 	velocity.x *= 1 / (1 + (delta * friction))
 	velocity += acc * delta
 		
-	_was_on_ground = is_feet_on_ground()
+	_was_on_ground = is_on_floor()
 	move_and_slide()
 	
 	classify_state()
@@ -219,7 +193,7 @@ func classify_state():
 			state = PlayerState.RUNNING
 	if velocity.y < 0:
 		state = PlayerState.JUMPING
-	if velocity.y > 0 and not is_feet_on_ground():
+	if velocity.y > 0 and not is_on_floor():
 		state = PlayerState.FALLING
 		
 # animates the player based on state
@@ -243,73 +217,28 @@ func animation():
 			$AnimatedSprite2D.animation = "fall"
 		
 func start_coyote_timer():
-	if is_coyote_time_enabled:
-		coyote_timer.start()
+	coyote_timer.start()
 
 func start_jump_buffer_timer():
-	if is_jump_buffer_enabled:
-		jump_buffer_timer.start()
+	jump_buffer_timer.start()
 
 func is_coyote_timer_running():
-	if (is_coyote_time_enabled and not coyote_timer.is_stopped()):
-		return true
-	
-	return false
+	return not coyote_timer.is_stopped()
 
 func is_jump_buffer_timer_running():
-	if is_jump_buffer_enabled and not jump_buffer_timer.is_stopped():
-		return true
-	
-	return false
+	return not jump_buffer_timer.is_stopped()
 
-func can_ground_jump() -> bool:
-	if jumps_left > 0 and current_jump_type == JumpType.NONE:
+func can_jump() -> bool:
+	if !jumping && is_on_floor():
 		return true
 	elif is_coyote_timer_running():
 		return true
 	
 	return false
 
-func can_double_jump():
-	if jumps_left <= 1 and jumps_left == max_jump_amount:
-		# Special case where you've fallen off a cliff and only have 1 jump. You cannot use your
-		# first jump in the air
-		return false
-	
-	if jumps_left > 0 and not is_feet_on_ground() and coyote_timer.is_stopped():
-		return true
-	
-	return false
-
-func is_feet_on_ground():
-	if is_on_floor() and default_gravity >= 0:
-		return true
-	if is_on_ceiling() and default_gravity <= 0:
-		return true
-	
-	return false
-
 func jump():
-	if can_double_jump():
-		double_jump()
-	else:
-		ground_jump()
-
-func double_jump():
-	if jumps_left == max_jump_amount:
-		# Your first jump must be used when on the ground.
-		# If your first jump is used in the air, an additional jump will be taken away.
-		jumps_left -= 1
-	
-	velocity.y = -double_jump_velocity
-	current_jump_type = JumpType.AIR
-	jumps_left -= 1
-	jumped.emit(false)
-
-func ground_jump():
 	velocity.y = -jump_velocity
-	current_jump_type = JumpType.GROUND
-	jumps_left -= 1
+	jumping = true
 	coyote_timer.stop()
 	$AnimatedSprite2D.play("jump")
 	jumped.emit(true)
@@ -321,8 +250,7 @@ func apply_gravity_multipliers_to(gravity) -> float:
 	# if we released jump and are still rising
 	elif velocity.y * sign(default_gravity) < 0:
 		if not holding_jump: 
-			if not current_jump_type == JumpType.AIR: # Always jump to max height when we are using a double jump
-				gravity *= release_gravity_multiplier # multiply the gravity so we have a lower jump
+			gravity *= release_gravity_multiplier # multiply the gravity so we have a lower jump
 	
 	return gravity
 
