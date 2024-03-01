@@ -78,7 +78,7 @@ vec2 warp(vec2 uv){
 }
 
 // Adds a black border to hide stretched pixel created by the warp effect
-float border (vec2 uv){
+float border(vec2 uv){
 	float radius = min(warp_amount, 0.08);
 	radius = max(min(min(abs(radius * 2.0), abs(1.0)), abs(1.0)), 1e-5);
 	vec2 abs_uv = abs(uv * 2.0 - 1.0) - vec2(1.0, 1.0) + radius;

@@ -6,9 +6,7 @@ signal jumped(is_ground_jump: bool)
 signal hit_ground()
 
 @export var input_left: String = "move_left"
-## Name of input action to move right.
 @export var input_right: String = "move_right"
-## Name of input action to jump.
 @export var input_jump: String = "jump"
 @export var input_sneak: String = "sneak"
 @export var input_light: String = "light"
@@ -18,9 +16,10 @@ const DEFAULT_MIN_JUMP_HEIGHT: int = 30
 const DEFAULT_DOUBLE_JUMP_HEIGHT: int = 100
 const DEFAULT_JUMP_DURATION: float = 0.3
 
-const light_deactivated_size := 0.2
-const light_activated_size := 2
+const LIGHT_DEACTIVATED_SIZE := 0.2
+const LIGHT_ACTIVATED_SIZE := 2
 
+# state types
 enum PlayerState { 
 	IDLE, 
 	WALKING, 
@@ -34,8 +33,18 @@ enum LookingState {
 	LEFT
 }
 
-var _max_jump_height: float = DEFAULT_MAX_JUMP_HEIGHT
-## The max jump height in pixels (holding jump).
+enum Light {
+	ON,
+	OFF
+}
+
+enum JumpType {
+	NONE,
+	GROUND, 
+	AIR
+}
+
+var _max_jump_height := DEFAULT_MAX_JUMP_HEIGHT
 @export var max_jump_height: float = DEFAULT_MAX_JUMP_HEIGHT: 
 	get:
 		return _max_jump_height
@@ -49,7 +58,6 @@ var _max_jump_height: float = DEFAULT_MAX_JUMP_HEIGHT
 				jump_velocity, min_jump_height, default_gravity)
 
 var _min_jump_height: float = DEFAULT_MIN_JUMP_HEIGHT
-## The minimum jump height (tapping jump).
 @export var min_jump_height: float = DEFAULT_MIN_JUMP_HEIGHT: 
 	get:
 		return _min_jump_height
@@ -96,17 +104,14 @@ var jumps_left: int
 var holding_jump := false
 var sneaking := false
 
-enum JumpType {NONE, GROUND, AIR}
-## The type of jump the player is performing. Is JumpType.NONE if they player is on the ground.
-var current_jump_type: JumpType = JumpType.NONE
-
-# Used to detect if player just hit the ground
 var _was_on_ground: bool
-
 var acc = Vector2()
 
+# states
 var state: PlayerState = PlayerState.IDLE
 var looking_state: LookingState = LookingState.RIGHT
+var light_state: Light = Light.OFF
+var current_jump_type: JumpType = JumpType.NONE
 
 # coyote_time and jump_buffer must be above zero to work. Otherwise, godot will throw an error.
 @onready var is_coyote_time_enabled = coyote_time > 0
@@ -139,7 +144,9 @@ func _process(delta):
 
 func _input(_event):
 	if Input.is_action_just_pressed(input_light):
-		$PlayerLight.texture_scale = light_deactivated_size if $PlayerLight.texture_scale == light_activated_size else light_activated_size
+		# modulate state here instead of in the classify state method
+		light_state = Light.ON if light_state == Light.OFF else Light.OFF
+		$PlayerLight.texture_scale = LIGHT_DEACTIVATED_SIZE if light_state == Light.OFF else LIGHT_ACTIVATED_SIZE
 	
 	acc.x = 0
 	if Input.is_action_pressed(input_left):
@@ -159,10 +166,11 @@ func _input(_event):
 		
 	if Input.is_action_pressed(input_sneak):
 		sneaking = true
-		acc.x /= 2
+		acc.x /= 8
 	else:
 		sneaking = false
 
+# movement
 func _physics_process(delta):
 	if is_coyote_timer_running() or current_jump_type == JumpType.NONE:
 		jumps_left = max_jump_amount
@@ -194,6 +202,7 @@ func _physics_process(delta):
 	classify_state()
 	animation()
 
+# classifies playerstate
 func classify_state():
 	if velocity.x < 0:
 		looking_state = LookingState.LEFT
@@ -213,6 +222,7 @@ func classify_state():
 	if velocity.y > 0 and not is_feet_on_ground():
 		state = PlayerState.FALLING
 		
+# animates the player based on state
 func animation():
 	match looking_state:
 		LookingState.RIGHT:
@@ -232,32 +242,25 @@ func animation():
 		PlayerState.FALLING:
 			$AnimatedSprite2D.animation = "fall"
 		
-## Use this instead of coyote_timer.start() to check if the coyote_timer is enabled first
 func start_coyote_timer():
 	if is_coyote_time_enabled:
 		coyote_timer.start()
 
-## Use this instead of jump_buffer_timer.start() to check if the jump_buffer is enabled first
 func start_jump_buffer_timer():
 	if is_jump_buffer_enabled:
 		jump_buffer_timer.start()
 
-## Use this instead of `not coyote_timer.is_stopped()`. This will always return false if 
-## the coyote_timer is disabled
 func is_coyote_timer_running():
 	if (is_coyote_time_enabled and not coyote_timer.is_stopped()):
 		return true
 	
 	return false
 
-## Use this instead of `not jump_buffer_timer.is_stopped()`. This will always return false if 
-## the jump_buffer_timer is disabled
 func is_jump_buffer_timer_running():
 	if is_jump_buffer_enabled and not jump_buffer_timer.is_stopped():
 		return true
 	
 	return false
-
 
 func can_ground_jump() -> bool:
 	if jumps_left > 0 and current_jump_type == JumpType.NONE:
@@ -266,7 +269,6 @@ func can_ground_jump() -> bool:
 		return true
 	
 	return false
-
 
 func can_double_jump():
 	if jumps_left <= 1 and jumps_left == max_jump_amount:
@@ -279,8 +281,6 @@ func can_double_jump():
 	
 	return false
 
-
-## Same as is_on_floor(), but also returns true if gravity is reversed and you are on the ceiling
 func is_feet_on_ground():
 	if is_on_floor() and default_gravity >= 0:
 		return true
@@ -289,16 +289,12 @@ func is_feet_on_ground():
 	
 	return false
 
-
-## Perform a ground jump, or a double jump if the character is in the air.
 func jump():
 	if can_double_jump():
 		double_jump()
 	else:
 		ground_jump()
 
-
-## Perform a double jump without checking if the player is able to.
 func double_jump():
 	if jumps_left == max_jump_amount:
 		# Your first jump must be used when on the ground.
@@ -310,8 +306,6 @@ func double_jump():
 	jumps_left -= 1
 	jumped.emit(false)
 
-
-## Perform a ground jump without checking if the player is able to.
 func ground_jump():
 	velocity.y = -jump_velocity
 	current_jump_type = JumpType.GROUND
@@ -319,7 +313,6 @@ func ground_jump():
 	coyote_timer.stop()
 	$AnimatedSprite2D.play("jump")
 	jumped.emit(true)
-
 
 func apply_gravity_multipliers_to(gravity) -> float:
 	if velocity.y * sign(default_gravity) > 0: # If we are falling
@@ -330,7 +323,6 @@ func apply_gravity_multipliers_to(gravity) -> float:
 		if not holding_jump: 
 			if not current_jump_type == JumpType.AIR: # Always jump to max height when we are using a double jump
 				gravity *= release_gravity_multiplier # multiply the gravity so we have a lower jump
-	
 	
 	return gravity
 

@@ -24,7 +24,6 @@ shape = SubResource("CapsuleShape2D_c4epx")
 show_behind_parent = true
 energy = 2.0
 shadow_enabled = true
-shadow_filter = 1
 shadow_filter_smooth = 4.5
 texture = ExtResource("3_eaq7n")
 texture_scale = 2.0
