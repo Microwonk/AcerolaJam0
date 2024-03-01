@@ -12,7 +12,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0vykn"]
 shader = ExtResource("8_ttda7")
 shader_parameter/overlay = false
-shader_parameter/scanlines_opacity = 0.4
+shader_parameter/scanlines_opacity = 0.5
 shader_parameter/scanlines_width = 0.5
 shader_parameter/grille_opacity = 0.0
 shader_parameter/resolution = Vector2(720, 480)
@@ -54,7 +54,6 @@ layer_2/name = "Objects"
 layer_2/tile_data = PackedInt32Array()
 
 [node name="PauseLayer" parent="." instance=ExtResource("2")]
-visible = false
 
 [node name="Player" parent="." instance=ExtResource("4_f8jol")]
 position = Vector2(482, 397)
