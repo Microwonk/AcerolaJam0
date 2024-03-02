@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://c2gocuhw2o7py"]
 
-[ext_resource type="FontFile" uid="uid://c10t8b5fip0p8" path="res://assets/fonts/MinimalPixelFont.ttf" id="2_0tetv"]
-[ext_resource type="Script" path="res://scenes/menu/game_version.gd" id="4_3hod2"]
-[ext_resource type="Script" path="res://scenes/menu/menu.gd" id="5"]
-[ext_resource type="Script" path="res://scenes/menu/godot_version.gd" id="5_fdyjp"]
+[ext_resource type="Script" path="res://scenes/menu/menu.gd" id="1_7pott"]
+[ext_resource type="FontFile" uid="uid://c10t8b5fip0p8" path="res://assets/fonts/MinimalPixelFont.ttf" id="2_gg6cc"]
+[ext_resource type="Script" path="res://scenes/menu/game_version.gd" id="3_n6tnt"]
+[ext_resource type="Script" path="res://scenes/menu/godot_version.gd" id="4_k1te8"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -12,7 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("5")
+script = ExtResource("1_7pott")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -47,9 +47,9 @@ grow_vertical = 2
 
 [node name="Title" type="Label" parent="MarginContainer/Control/CenterContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_0tetv")
+theme_override_fonts/font = ExtResource("2_gg6cc")
 theme_override_font_sizes/font_size = 100
-text = "Ceselestial Aberrations"
+text = "Celestial Aberrations"
 uppercase = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Control"]
@@ -73,7 +73,7 @@ layout_mode = 2
 focus_neighbor_bottom = NodePath("../ExitButton")
 focus_next = NodePath("../ExitButton")
 focus_mode = 0
-theme_override_fonts/font = ExtResource("2_0tetv")
+theme_override_fonts/font = ExtResource("2_gg6cc")
 theme_override_font_sizes/font_size = 45
 text = "START"
 
@@ -83,7 +83,7 @@ layout_mode = 2
 focus_neighbor_top = NodePath("../PlayButton")
 focus_previous = NodePath("../PlayButton")
 focus_mode = 0
-theme_override_fonts/font = ExtResource("2_0tetv")
+theme_override_fonts/font = ExtResource("2_gg6cc")
 theme_override_font_sizes/font_size = 45
 text = "EXIT"
 
@@ -99,19 +99,19 @@ grow_vertical = 0
 [node name="GameVersion" type="Label" parent="MarginContainer/Control/Version"]
 layout_mode = 2
 theme_type_variation = &"LabelSmall"
-theme_override_fonts/font = ExtResource("2_0tetv")
+theme_override_fonts/font = ExtResource("2_gg6cc")
 theme_override_font_sizes/font_size = 35
 text = "<x.y.z>"
-script = ExtResource("4_3hod2")
+script = ExtResource("3_n6tnt")
 
 [node name="GodotVersion" type="Label" parent="MarginContainer/Control/Version"]
 layout_mode = 2
 theme_type_variation = &"LabelSmall"
 theme_override_colors/font_color = Color(0.92549, 0.92549, 0.92549, 1)
-theme_override_fonts/font = ExtResource("2_0tetv")
+theme_override_fonts/font = ExtResource("2_gg6cc")
 theme_override_font_sizes/font_size = 35
 text = "<GodotVersion>"
-script = ExtResource("5_fdyjp")
+script = ExtResource("4_k1te8")
 
 [node name="Credits" type="VBoxContainer" parent="MarginContainer/Control"]
 layout_mode = 1
@@ -129,7 +129,7 @@ grow_vertical = 0
 layout_mode = 2
 theme_type_variation = &"LabelSmall"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_0tetv")
+theme_override_fonts/font = ExtResource("2_gg6cc")
 theme_override_font_sizes/font_size = 35
 text = "made by: Microwonk"
 

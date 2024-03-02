@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://byniue2cdd2yv"
-path="res://.godot/imported/pause_button.png-70c9bf3f2acf4e572f86b5334cb6e8a3.ctex"
+uid="uid://cfh2vegnlynn"
+path="res://.godot/imported/icon_modification.png-604d3f99a8359e1d5e18a09da4d31155.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/gameplay/pause-layer/pause_button.png"
-dest_files=["res://.godot/imported/pause_button.png-70c9bf3f2acf4e572f86b5334cb6e8a3.ctex"]
+source_file="res://addons/Souperior 2D Skeleton Modifications/Animatinators/Modifications/Icons/icon_modification.png"
+dest_files=["res://.godot/imported/icon_modification.png-604d3f99a8359e1d5e18a09da4d31155.ctex"]
 
 [params]
 

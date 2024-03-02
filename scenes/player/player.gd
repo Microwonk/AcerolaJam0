@@ -19,6 +19,8 @@ const DEFAULT_JUMP_DURATION: float = 0.3
 const LIGHT_DEACTIVATED_SIZE := 0.2
 const LIGHT_ACTIVATED_SIZE := 2
 
+static var instance : Player = null
+
 # state types
 enum PlayerState { 
 	IDLE, 
@@ -75,7 +77,7 @@ var _jump_duration: float = DEFAULT_JUMP_DURATION
 @export var max_acceleration = 3000
 @export var friction = 20
 @export var can_hold_jump: bool = false
-@export var coyote_time: float = 1.0
+@export var coyote_time: float = 0.01
 @export var jump_buffer: float = 0.1
 
 var default_gravity: float
@@ -146,33 +148,31 @@ func _input(_event):
 
 # movement
 func _physics_process(delta):
-	print(is_on_floor())
 	if !is_on_floor() and !jumping:
 		start_coyote_timer()
-		print(coyote_timer.time_left)		
-		
+
 	# Check if we just hit the ground this frame
 	if not _was_on_ground and is_on_floor():
 		jumping = false
 		if is_jump_buffer_timer_running() and not can_hold_jump: 
 			jump()
-		hit_ground.emit()	
-	
+		hit_ground.emit()
+
 	# Cannot do this in _input because it needs to be checked every frame
 	if Input.is_action_pressed(input_jump):
 		if can_jump() and can_hold_jump:
 			jump()
-	
+
 	var gravity = apply_gravity_multipliers_to(default_gravity)
 	acc.y = gravity
-	
+
 	# Apply friction
 	velocity.x *= 1 / (1 + (delta * friction))
 	velocity += acc * delta
 		
 	_was_on_ground = is_on_floor()
 	move_and_slide()
-	
+
 	classify_state()
 	animation()
 
@@ -229,12 +229,7 @@ func is_jump_buffer_timer_running():
 	return not jump_buffer_timer.is_stopped()
 
 func can_jump() -> bool:
-	if !jumping && is_on_floor():
-		return true
-	elif is_coyote_timer_running():
-		return true
-	
-	return false
+	return is_on_floor() or is_coyote_timer_running()
 
 func jump():
 	velocity.y = -jump_velocity
