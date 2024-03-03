@@ -7,12 +7,8 @@
 </p>
 
 < Aberration > \
-< Celestial Aberrations >
+< Game Title: Celestial Aberration >
 
 ## Description
 
-
 ## Resources And Technologies
-
-
-

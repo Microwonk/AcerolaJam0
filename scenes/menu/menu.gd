@@ -6,13 +6,13 @@ extends Control
 
 func _ready():
 	# needed for gamepads to work
-	btn_play.grab_focus()
+	# btn_play.grab_focus()
 	if OS.has_feature('web'):
 		btn_exit.queue_free() # exit button dosn't make sense on HTML5
 
 
 func _on_PlayButton_pressed() -> void:
-	Game.change_scene_to_file("res://scenes/gameplay/Gameplay.tscn")
+	Game.change_scene_to_file("res://scenes/intro/Intro.tscn")
 
 
 func _on_ExitButton_pressed() -> void:

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bab2euxhn777p"
-path="res://.godot/imported/Celestial_Aberration_Pieces.png-9f7a3b4ddc114cd62516db04c7c3c96b.ctex"
+path="res://.godot/imported/Celestial_Aberrant_Pieces.png-795d2ddb38b9aafc1dfad4b50bb79e99.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Celestial_Aberration_Pieces.png"
-dest_files=["res://.godot/imported/Celestial_Aberration_Pieces.png-9f7a3b4ddc114cd62516db04c7c3c96b.ctex"]
+source_file="res://assets/Celestial_Aberrant_Pieces.png"
+dest_files=["res://.godot/imported/Celestial_Aberrant_Pieces.png-795d2ddb38b9aafc1dfad4b50bb79e99.ctex"]
 
 [params]
 

@@ -36,7 +36,7 @@ layer_2/tile_data = PackedInt32Array()
 [node name="PauseLayer" parent="." instance=ExtResource("3_rwp5o")]
 
 [node name="Player" parent="." instance=ExtResource("4_snpf0")]
-position = Vector2(816, 391)
+position = Vector2(780, 406)
 
 [node name="CelestialAberration" parent="." instance=ExtResource("5_cx4ge")]
 position = Vector2(620, 394)
@@ -72,7 +72,7 @@ priority_override = false
 priority = 5
 zoom = Vector2(2, 2)
 follow_mode = 2
-follow_target = NodePath("../Player")
+follow_target = NodePath("")
 follow_parameters/target_offset = Vector2(0, -30)
 follow_parameters/damping = true
 follow_parameters/damping_value = 100.0
@@ -88,8 +88,3 @@ limit/smoothed = false
 tween_parameters = SubResource("Resource_bxgfk")
 tween_on_load = true
 inactive_update_mode = 0
-
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-z_index = 1
-position = Vector2(-482, -327)
-color = Color(0, 0, 0, 1)

@@ -3,45 +3,63 @@ extends Node2D
 @onready var back_leg_target = $LegBIKTarget
 @onready var front_leg_target = $LegFIKTarget
 @onready var neck_target = $NeckIKTarget
+@onready var neck = $skeleton/Body/Neck
 @onready var looking_at = $NeckIKTarget/HeadLookAtTarget
 @onready var body = $skeleton/Body
 
-@export var move_speed: float = 0.2
-@export var desired_offset: float = 5.0
+@export var move_speed: float = 20.0
+@export var body_offset: float = 30.0
 @export var lerp_factor_flip: float = 0.05
 @export var lerp_factor_body: float = 0.01
-@export var lerp_factor_head: float = 0.01
+@export var lerp_factor_head: float = 0.3
 
 func _physics_process(delta):
-	global_position.x += 0.1
+	# most minimal AI I can imagine
+	global_position.x += sign(Globals.player.global_position.x - global_position.x) * move_speed * delta
 	
 func _process(delta):
-	# TODO
-	# PLANE
-	
-	body_offset(delta)
+	#offset(delta, neck_target, 25)
+	body_toward_player(delta, 25)	
+	offset(delta, body, body_offset)
 	look_at_player()
-	body_toward_player()
 	
-func body_offset(delta):
-	var avg = (back_leg_target.position + front_leg_target.position) / 2
-	var target_pos = avg + body.transform.y * desired_offset
-	var distance = body.transform.y.dot(target_pos - body.position)
-	body.position.y = lerp(body.position, body.position + body.transform.y * distance, move_speed * delta).y
+# to function in case i need to offset something else as well
+func offset(delta, element, desired_offset):
+	var avg = avg_legs()
+	var target_pos = avg + element.transform.y * -desired_offset
+	var distance = element.transform.y.dot(target_pos - element.global_position)
+	element.global_position.y = lerp(element.global_position, element.global_position + element.transform.y * distance, 9.0 * delta).y
+
+func avg_legs() -> Vector2:
+	return (back_leg_target.global_position + front_leg_target.global_position) / 2
 	
 func look_at_player():
-	looking_at.global_position = lerp(looking_at.global_position, Player.instance.get_position(), 0.1)
-	if (global_position.x - looking_at.global_position.x) * self.scale.x < 0 or abs(self.scale.x) != 1:
-		flip_horizontally()
+	looking_at.global_position = lerp(looking_at.global_position, Globals.player.global_position, lerp_factor_head)
+	flip_horizontally()
 	
 func flip_horizontally():
-	var target_scale_x = sign(Player.instance.global_position.x - global_position.x)	
-	self.scale.x = lerp(self.scale.x, -target_scale_x, 0.05)
+	var player_position = Globals.player.global_position
+	const distance_threshold = 5
+	var distance_to_player = abs(player_position.x - global_position.x)
+
+	if distance_to_player > distance_threshold:
+		var target_scale_x = -sign(player_position.x - global_position.x)    
+		self.scale.x = target_scale_x
 	
-func body_toward_player():
-	var player_position = Player.instance.get_position()
-	var target_y = lerp(neck_target.global_position.y, player_position.y, lerp_factor_body)
-	# clamp targets, so the body doesnt overshoot
-	var max_y = global_position.y + 10;
-	var min_y = global_position.y - 10;
-	neck_target.global_position.y = clamp(target_y, min_y, max_y) - 0.3
+func body_toward_player(delta, minimum_offset):
+	var avg = avg_legs()
+	var target_pos = avg + neck_target.transform.y * -minimum_offset
+	
+	var player_position = Globals.player.global_position
+	var min_y = target_pos.y - 10;
+	var target_y = min(target_pos.y, clamp(player_position.y, min_y, target_pos.y))
+	target_pos.y = target_y
+	
+	var distance = neck_target.transform.y.dot(target_pos - neck_target.global_position)
+	neck_target.global_position.y = lerp(neck_target.global_position, neck_target.global_position + neck_target.transform.y * distance, 5 * delta).y
+	
+func _on_hit_box_body_entered(body_entered):
+	if body_entered == Globals.player:
+		# TODO kill player here
+		print("Player ded")
+		

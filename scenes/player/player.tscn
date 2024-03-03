@@ -1,15 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0lhb0ulxkuyf"]
+[gd_scene load_steps=7 format=3 uid="uid://b0lhb0ulxkuyf"]
 
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_fmtmv"]
 [ext_resource type="SpriteFrames" uid="uid://ddtgkg4xs1d6m" path="res://resources/animations/player_sprite_frames.tres" id="1_gjsc8"]
-[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_r2my3"]
 [ext_resource type="Texture2D" uid="uid://c4pxtq7wfqqc5" path="res://assets/sprites/point_light.png" id="3_eaq7n"]
+[ext_resource type="AudioStream" uid="uid://djlyypt5kv1wl" path="res://assets/sound/flash_light.wav" id="3_xpoyx"]
+[ext_resource type="AudioStream" uid="uid://fpmnwgcjh1rt" path="res://assets/sound/step.wav" id="5_k4qvb"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4epx"]
 radius = 6.0
 height = 16.0
 
 [node name="Player" type="CharacterBody2D"]
-script = ExtResource("1_r2my3")
+script = ExtResource("1_fmtmv")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -32)
@@ -28,7 +30,13 @@ shadow_filter_smooth = 4.5
 texture = ExtResource("3_eaq7n")
 texture_scale = 2.0
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-z_index = 1
-position = Vector2(-482, -327)
-color = Color(0, 0, 0, 1)
+[node name="Flashlight" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_xpoyx")
+volume_db = -24.0
+pitch_scale = 1.2
+attenuation = 0.189465
+
+[node name="FootSteps" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_k4qvb")
+volume_db = -40.0
+pitch_scale = 0.8

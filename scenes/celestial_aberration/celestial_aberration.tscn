@@ -1,28 +1,29 @@
-[gd_scene load_steps=11 format=3 uid="uid://h4w7o8n67aqc"]
+[gd_scene load_steps=13 format=3 uid="uid://h4w7o8n67aqc"]
 
 [ext_resource type="Script" path="res://scenes/celestial_aberration/celestial_aberration.gd" id="1_5uy6q"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/ik_target.gd" id="2_jq0vq"]
-[ext_resource type="Texture2D" uid="uid://bab2euxhn777p" path="res://assets/Celestial_Aberration_Pieces.png" id="2_rt3wt"]
+[ext_resource type="Texture2D" uid="uid://bab2euxhn777p" path="res://assets/Celestial_Aberrant_Pieces.png" id="2_rt3wt"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/soup_stack.gd" id="3_wt7dq"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/soup_sub_stack.gd" id="4_oj4oi"]
+[ext_resource type="Script" path="res://addons/ropesim/Rope.gd" id="4_ryj5u"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/Modifications/soup_two_bone_ik.gd" id="5_add7p"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/Modifications/soup_look_at.gd" id="6_1na2o"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/step_ray.gd" id="7_56yno"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/step_targets.gd" id="8_eceil"]
+[ext_resource type="AudioStream" uid="uid://bl4ekhmqjacj3" path="res://assets/sound/clicking.wav" id="11_1c25g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvs5"]
-size = Vector2(66, 46)
+size = Vector2(56, 46)
 
 [node name="CelestialAberration" type="Node2D"]
 position = Vector2(15, -7)
 script = ExtResource("1_5uy6q")
 
-[node name="HurtBox" type="Area2D" parent="."]
-visible = false
+[node name="HitBox" type="Area2D" parent="."]
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(-16, 7)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(-18, 7)
 shape = SubResource("RectangleShape2D_1bvs5")
 debug_color = Color(0.498039, 0.580392, 0, 0.419608)
 
@@ -33,12 +34,6 @@ script = ExtResource("2_jq0vq")
 step_target = NodePath("../StepTargets/LegBRay/LegBStepTarget")
 other = NodePath("../LegFIKTarget")
 
-[node name="ColorRect" type="ColorRect" parent="LegBIKTarget"]
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.0892529, 0.0841218)
-color = Color(0.254902, 0.52549, 0, 1)
-
 [node name="FootLookAtTargetB" type="Marker2D" parent="LegBIKTarget"]
 position = Vector2(0, 4)
 
@@ -48,12 +43,6 @@ position = Vector2(-1, 23)
 script = ExtResource("2_jq0vq")
 step_target = NodePath("../StepTargets/LegFRay/LegFStepTarget")
 other = NodePath("../LegBIKTarget")
-
-[node name="ColorRect" type="ColorRect" parent="LegFIKTarget"]
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.0892529, 0.0841218)
-color = Color(0.823529, 0.643137, 0.0352941, 1)
 
 [node name="FootLookAtTargetF" type="Marker2D" parent="LegFIKTarget"]
 position = Vector2(0, 4)
@@ -153,6 +142,76 @@ texture = ExtResource("2_rt3wt")
 region_enabled = true
 region_rect = Rect2(62, 19, 27, 21)
 
+[node name="Ropes" type="Node" parent="parts/Head/Head"]
+
+[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes"]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(-5.99997, -16)
+rotation = -1.08657
+scale = Vector2(0.999996, 0.999996)
+script = ExtResource("4_ryj5u")
+rope_length = 30.0
+gravity = -0.1
+damping = 10.0
+line_width = 1.0
+color = Color(0.137255, 0.054902, 0.113725, 1)
+
+[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope"]
+position = Vector2(1.39657, 2.65512)
+rotation = -1.08657
+scale = Vector2(0.999996, 0.999996)
+script = ExtResource("4_ryj5u")
+rope_length = 20.0
+gravity = -0.2
+damping = 10.0
+line_width = 1.0
+color = Color(0.0196078, 0.00392157, 0.0156863, 1)
+
+[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope"]
+position = Vector2(4.22351, -4.37751)
+rotation = -1.08657
+scale = Vector2(0.999996, 0.999996)
+script = ExtResource("4_ryj5u")
+rope_length = 30.0
+gravity = 0.0
+damping = 20.0
+line_width = 1.0
+color = Color(0.0196078, 0.00392157, 0.0156863, 1)
+
+[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope/Rope"]
+position = Vector2(-4.49382, -4.56141)
+rotation = -1.08657
+scale = Vector2(0.999996, 0.999996)
+script = ExtResource("4_ryj5u")
+rope_length = 50.0
+gravity = 0.2
+damping = 10.0
+line_width = 1.0
+color = Color(0.137255, 0.054902, 0.113725, 1)
+
+[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope/Rope/Rope"]
+position = Vector2(1.78993, 4.66872)
+rotation = -1.08657
+scale = Vector2(0.999996, 0.999996)
+script = ExtResource("4_ryj5u")
+rope_length = 40.0
+gravity = 0.1
+damping = 10.0
+line_width = 1.0
+color = Color(0.0196078, 0.00392157, 0.0156863, 1)
+
+[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope/Rope/Rope/Rope"]
+position = Vector2(-2.82252, 0.183525)
+rotation = -1.08657
+scale = Vector2(0.999996, 0.999996)
+script = ExtResource("4_ryj5u")
+rope_length = 20.0
+gravity = -0.01
+damping = 20.0
+line_width = 1.0
+color = Color(0.0196078, 0.00392157, 0.0156863, 1)
+
 [node name="skeleton" type="Skeleton2D" parent="."]
 
 [node name="Stack" type="Node" parent="skeleton"]
@@ -219,7 +278,7 @@ bone_node = NodePath("../../../Body/UpperB/LowerB/FootB")
 [node name="Body" type="Bone2D" parent="skeleton"]
 rotation = 0.179088
 scale = Vector2(0.999998, 0.999998)
-rest = Transform2D(0.992145, 0.125086, -0.125086, 0.992145, 0, 0)
+rest = Transform2D(0.984004, 0.178132, -0.178132, 0.984004, 0, 0)
 editor_settings/show_bone_gizmo = false
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="skeleton/Body"]
@@ -230,7 +289,7 @@ remote_path = NodePath("../../../parts/Body/Body")
 position = Vector2(-6.75489, 5.32649)
 rotation = -3.02858
 scale = Vector2(0.999999, 0.999999)
-rest = Transform2D(-0.979763, 0.200158, -0.200158, -0.979763, -6.75489, 5.32649)
+rest = Transform2D(-0.993619, -0.112775, 0.112775, -0.993619, -6.75489, 5.32649)
 editor_settings/show_bone_gizmo = false
 
 [node name="RemoteTransform2D2" type="RemoteTransform2D" parent="skeleton/Body/UpperB"]
@@ -242,7 +301,7 @@ remote_path = NodePath("../../../../parts/LegB/Upper")
 position = Vector2(-15.0016, -7.56843)
 rotation = 2.59473
 scale = Vector2(0.999999, 0.999999)
-rest = Transform2D(-0.962408, 0.271604, -0.271604, -0.962408, -15.0016, -7.56843)
+rest = Transform2D(-0.854161, 0.520006, -0.520006, -0.854161, -15.0016, -7.56843)
 editor_settings/show_bone_gizmo = false
 
 [node name="RemoteTransform2D3" type="RemoteTransform2D" parent="skeleton/Body/UpperB/LowerB"]
@@ -253,7 +312,7 @@ remote_path = NodePath("../../../../../parts/LegB/Lower")
 position = Vector2(-11.9412, 11.7647)
 rotation = 0.254754
 scale = Vector2(0.999999, 0.999999)
-rest = Transform2D(0.824962, 0.565187, -0.565187, 0.824962, -11.9412, 11.7647)
+rest = Transform2D(0.967724, 0.252008, -0.252008, 0.967724, -11.9412, 11.7647)
 auto_calculate_length_and_angle = false
 length = 4.0
 bone_angle = 90.0
@@ -267,7 +326,7 @@ remote_path = NodePath("../../../../../../parts/LegB/Foot")
 position = Vector2(-6.75489, 5.32649)
 rotation = -2.5251
 scale = Vector2(0.999999, 0.999999)
-rest = Transform2D(-0.988806, -0.149207, 0.149207, -0.988806, -6.75489, 5.32649)
+rest = Transform2D(-0.815908, -0.578179, 0.578179, -0.815908, -6.75489, 5.32649)
 editor_settings/show_bone_gizmo = false
 
 [node name="RemoteTransform2D2" type="RemoteTransform2D" parent="skeleton/Body/UpperF"]
@@ -279,7 +338,7 @@ remote_path = NodePath("../../../../parts/LegF/Upper")
 position = Vector2(-15.0016, -7.56843)
 rotation = 2.48873
 scale = Vector2(0.999998, 0.999998)
-rest = Transform2D(-0.996942, 0.0781352, -0.0781352, -0.996942, -15.0016, -7.56843)
+rest = Transform2D(-0.794343, 0.607465, -0.607465, -0.794343, -15.0016, -7.56843)
 editor_settings/show_bone_gizmo = false
 
 [node name="RemoteTransform2D3" type="RemoteTransform2D" parent="skeleton/Body/UpperF/LowerF"]
@@ -289,7 +348,7 @@ remote_path = NodePath("../../../../../parts/LegF/Lower")
 [node name="FootF" type="Bone2D" parent="skeleton/Body/UpperF/LowerF"]
 position = Vector2(-11.9412, 11.7647)
 rotation = -0.141602
-rest = Transform2D(0.997728, -0.0673782, 0.0673782, 0.997728, -11.9412, 11.7647)
+rest = Transform2D(0.989991, -0.141129, 0.141129, 0.989991, -11.9412, 11.7647)
 auto_calculate_length_and_angle = false
 length = 4.0
 bone_angle = 90.0
@@ -303,7 +362,7 @@ remote_path = NodePath("../../../../../../parts/LegF/Foot")
 position = Vector2(-33.0711, 15.1096)
 rotation = -1.26566
 scale = Vector2(0.999998, 0.999998)
-rest = Transform2D(0.478979, -0.877826, 0.877826, 0.478979, -33.0711, 15.1096)
+rest = Transform2D(0.300423, -0.953804, 0.953804, 0.300423, -33.0711, 15.1096)
 editor_settings/show_bone_gizmo = false
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="skeleton/Body/Neck"]
@@ -315,7 +374,7 @@ remote_path = NodePath("../../../../parts/Body/Neck")
 position = Vector2(13.0824, 1.29203)
 rotation = -2.17584
 scale = Vector2(0.999999, 0.999999)
-rest = Transform2D(-0.691015, -0.72284, 0.72284, -0.691015, 13.0824, 1.29203)
+rest = Transform2D(-0.568795, -0.822478, 0.822478, -0.568795, 13.0824, 1.29203)
 auto_calculate_length_and_angle = false
 length = 16.0
 bone_angle = -3.86205
@@ -326,12 +385,16 @@ position = Vector2(0, 3.485)
 rotation = -2.76809
 remote_path = NodePath("../../../../../parts/Head/Head")
 
+[node name="RopesRT" type="RemoteTransform2D" parent="skeleton/Body/Neck"]
+position = Vector2(22.5364, 4.22864)
+remote_path = NodePath("../../../../parts/Head/Head/Ropes/Rope")
+
 [node name="StepTargets" type="Node2D" parent="."]
 script = ExtResource("8_eceil")
 
 [node name="LegBRay" type="RayCast2D" parent="StepTargets" node_paths=PackedStringArray("step_target")]
-position = Vector2(-4, 11)
-target_position = Vector2(0, 42)
+position = Vector2(-16, 11)
+target_position = Vector2(0, 90)
 hit_from_inside = true
 script = ExtResource("7_56yno")
 step_target = NodePath("LegBStepTarget")
@@ -339,15 +402,9 @@ step_target = NodePath("LegBStepTarget")
 [node name="LegBStepTarget" type="Marker2D" parent="StepTargets/LegBRay"]
 position = Vector2(0, 19)
 
-[node name="ColorRect" type="ColorRect" parent="StepTargets/LegBRay/LegBStepTarget"]
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.0892529, 0.0841218)
-color = Color(0.219608, 0.34902, 1, 1)
-
 [node name="LegFRay" type="RayCast2D" parent="StepTargets" node_paths=PackedStringArray("step_target")]
-position = Vector2(-4, 11)
-target_position = Vector2(0, 42)
+position = Vector2(-28, 11)
+target_position = Vector2(0, 90)
 hit_from_inside = true
 script = ExtResource("7_56yno")
 step_target = NodePath("LegFStepTarget")
@@ -355,8 +412,10 @@ step_target = NodePath("LegFStepTarget")
 [node name="LegFStepTarget" type="Marker2D" parent="StepTargets/LegFRay"]
 position = Vector2(0, 19)
 
-[node name="ColorRect" type="ColorRect" parent="StepTargets/LegFRay/LegFStepTarget"]
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.0892529, 0.0841218)
-color = Color(0.752941, 0, 0.65098, 1)
+[node name="Clicking" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_1c25g")
+volume_db = -10.0
+pitch_scale = 0.01
+autoplay = true
+
+[connection signal="body_entered" from="HitBox" to="." method="_on_hit_box_body_entered"]

@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Celestial Aberrations"
+config/name="Celestial Aberration"
 config/version="0.0.1"
 run/main_scene="res://scenes/menu/Menu.tscn"
 config/features=PackedStringArray("4.2")
@@ -37,7 +37,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
+enabled=PackedStringArray("res://addons/Souperior 2D Skeleton Modifications/plugin.cfg", "res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/phantom_camera/plugin.cfg", "res://addons/ropesim/plugin.cfg")
 
 [gui]
 
@@ -109,4 +109,4 @@ light={
 
 textures/canvas_textures/default_texture_filter=0
 environment/screen_space_reflection/roughness_quality=2
-environment/defaults/default_clear_color=Color(0.498039, 0.498039, 0.498039, 1)
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

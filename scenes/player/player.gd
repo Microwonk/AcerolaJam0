@@ -1,7 +1,4 @@
 extends CharacterBody2D
-
-class_name Player
-
 signal jumped(is_ground_jump: bool)
 signal hit_ground()
 
@@ -11,14 +8,12 @@ signal hit_ground()
 @export var input_sneak: String = "sneak"
 @export var input_light: String = "light"
 
-const DEFAULT_MAX_JUMP_HEIGHT: int = 60
-const DEFAULT_MIN_JUMP_HEIGHT: int = 30
+const DEFAULT_MAX_JUMP_HEIGHT: float = 50
+const DEFAULT_MIN_JUMP_HEIGHT: float = 30
 const DEFAULT_JUMP_DURATION: float = 0.3
 
 const LIGHT_DEACTIVATED_SIZE := 0.2
-const LIGHT_ACTIVATED_SIZE := 2
-
-static var instance : Player = null
+const LIGHT_ACTIVATED_SIZE := 2.0
 
 # state types
 enum PlayerState { 
@@ -73,7 +68,7 @@ var _jump_duration: float = DEFAULT_JUMP_DURATION
 				jump_velocity, min_jump_height, default_gravity)
 		
 @export var falling_gravity_multiplier = 1.5
-@export var max_acceleration = 3000
+@export var max_acceleration = 2500
 @export var friction = 20
 @export var can_hold_jump: bool = false
 @export var coyote_time: float = 0.01
@@ -91,7 +86,7 @@ var acc = Vector2()
 # states
 var state: PlayerState = PlayerState.IDLE
 var looking_state: LookingState = LookingState.RIGHT
-var light_state: Light = Light.OFF
+var light_state: Light = Light.ON
 var jumping = false
 
 @onready var coyote_timer = Timer.new()
@@ -119,6 +114,7 @@ func _process(_delta):
 
 func _input(_event):
 	if Input.is_action_just_pressed(input_light):
+		$Flashlight.play()
 		# modulate state here instead of in the classify state method
 		light_state = Light.ON if light_state == Light.OFF else Light.OFF
 		$PlayerLight.texture_scale = LIGHT_DEACTIVATED_SIZE if light_state == Light.OFF else LIGHT_ACTIVATED_SIZE
@@ -174,6 +170,7 @@ func _physics_process(delta):
 
 	classify_state()
 	animation()
+	sound()
 
 # classifies playerstate
 func classify_state():
@@ -214,6 +211,21 @@ func animation():
 			$AnimatedSprite2D.animation = "idle"
 		PlayerState.FALLING:
 			$AnimatedSprite2D.animation = "fall"
+			
+func sound():
+	match state:
+		PlayerState.JUMPING:
+			print("jump")
+		PlayerState.WALKING:
+			print("walk")
+		PlayerState.RUNNING:
+			if !$FootSteps.is_playing():
+				$FootSteps.play()
+		PlayerState.IDLE:
+			print("idle")
+		PlayerState.FALLING:
+			print("fall")
+	
 		
 func start_coyote_timer():
 	coyote_timer.start()

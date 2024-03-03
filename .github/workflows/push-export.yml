@@ -6,7 +6,7 @@ on:
       # - "feature/**"
 env:
   GODOT_VERSION: 4.2.1
-  EXPORT_NAME: Celestial Aberrations
+  EXPORT_NAME: Celestial_Aberration
   ITCH_IO: true
 
 jobs:
