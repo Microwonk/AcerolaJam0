@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-# TODO fix coyote timer
 class_name Player
 
 signal jumped(is_ground_jump: bool)

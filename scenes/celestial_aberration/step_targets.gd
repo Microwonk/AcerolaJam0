@@ -5,7 +5,7 @@ extends Node2D
 @onready var parent = get_parent()
 @onready var previous_pos = parent.global_position
 
-func _process(delta):
+func _process(_delta):
 	var velocity = parent.global_position - previous_pos
 	global_position = parent.global_position + velocity * offset
 	

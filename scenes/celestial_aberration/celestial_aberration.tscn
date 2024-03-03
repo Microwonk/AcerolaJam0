@@ -33,6 +33,12 @@ script = ExtResource("2_jq0vq")
 step_target = NodePath("../StepTargets/LegBRay/LegBStepTarget")
 other = NodePath("../LegFIKTarget")
 
+[node name="ColorRect" type="ColorRect" parent="LegBIKTarget"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.0892529, 0.0841218)
+color = Color(0.254902, 0.52549, 0, 1)
+
 [node name="FootLookAtTargetB" type="Marker2D" parent="LegBIKTarget"]
 position = Vector2(0, 4)
 
@@ -42,6 +48,12 @@ position = Vector2(-1, 23)
 script = ExtResource("2_jq0vq")
 step_target = NodePath("../StepTargets/LegFRay/LegFStepTarget")
 other = NodePath("../LegBIKTarget")
+
+[node name="ColorRect" type="ColorRect" parent="LegFIKTarget"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.0892529, 0.0841218)
+color = Color(0.823529, 0.643137, 0.0352941, 1)
 
 [node name="FootLookAtTargetF" type="Marker2D" parent="LegFIKTarget"]
 position = Vector2(0, 4)
@@ -95,7 +107,7 @@ region_enabled = true
 region_rect = Rect2(50.4037, 81.5392, 15.2697, 14.7292)
 
 [node name="Lower" type="Sprite2D" parent="parts/LegB"]
-position = Vector2(6.75646, 10.6719)
+position = Vector2(6.75647, 10.6719)
 rotation = -0.254754
 scale = Vector2(0.999996, 0.999996)
 texture = ExtResource("2_rt3wt")
@@ -104,8 +116,8 @@ region_enabled = true
 region_rect = Rect2(51, 82, 14, 14)
 
 [node name="Foot" type="Sprite2D" parent="parts/LegB"]
-position = Vector2(3.50003, 21)
-scale = Vector2(0.999996, 0.999996)
+position = Vector2(3.50004, 21)
+scale = Vector2(0.999995, 0.999995)
 texture = ExtResource("2_rt3wt")
 centered = false
 region_enabled = true
@@ -240,7 +252,7 @@ remote_path = NodePath("../../../../../parts/LegB/Lower")
 [node name="FootB" type="Bone2D" parent="skeleton/Body/UpperB/LowerB"]
 position = Vector2(-11.9412, 11.7647)
 rotation = 0.254754
-scale = Vector2(1, 1)
+scale = Vector2(0.999999, 0.999999)
 rest = Transform2D(0.824962, 0.565187, -0.565187, 0.824962, -11.9412, 11.7647)
 auto_calculate_length_and_angle = false
 length = 4.0
@@ -318,7 +330,7 @@ remote_path = NodePath("../../../../../parts/Head/Head")
 script = ExtResource("8_eceil")
 
 [node name="LegBRay" type="RayCast2D" parent="StepTargets" node_paths=PackedStringArray("step_target")]
-position = Vector2(-12, 11)
+position = Vector2(-4, 11)
 target_position = Vector2(0, 42)
 hit_from_inside = true
 script = ExtResource("7_56yno")
@@ -327,8 +339,14 @@ step_target = NodePath("LegBStepTarget")
 [node name="LegBStepTarget" type="Marker2D" parent="StepTargets/LegBRay"]
 position = Vector2(0, 19)
 
+[node name="ColorRect" type="ColorRect" parent="StepTargets/LegBRay/LegBStepTarget"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.0892529, 0.0841218)
+color = Color(0.219608, 0.34902, 1, 1)
+
 [node name="LegFRay" type="RayCast2D" parent="StepTargets" node_paths=PackedStringArray("step_target")]
-position = Vector2(-25, 11)
+position = Vector2(-4, 11)
 target_position = Vector2(0, 42)
 hit_from_inside = true
 script = ExtResource("7_56yno")
@@ -336,3 +354,9 @@ step_target = NodePath("LegFStepTarget")
 
 [node name="LegFStepTarget" type="Marker2D" parent="StepTargets/LegFRay"]
 position = Vector2(0, 19)
+
+[node name="ColorRect" type="ColorRect" parent="StepTargets/LegFRay/LegFStepTarget"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.0892529, 0.0841218)
+color = Color(0.752941, 0, 0.65098, 1)

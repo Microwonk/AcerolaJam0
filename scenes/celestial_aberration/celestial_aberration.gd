@@ -7,7 +7,7 @@ extends Node2D
 @onready var body = $skeleton/Body
 
 @export var move_speed: float = 0.2
-@export var desired_offset: float = 10.0
+@export var desired_offset: float = 5.0
 @export var lerp_factor_flip: float = 0.05
 @export var lerp_factor_body: float = 0.01
 @export var lerp_factor_head: float = 0.01
@@ -19,13 +19,15 @@ func _process(delta):
 	# TODO
 	# PLANE
 	
-	#var avg = (back_leg_target.position + front_leg_target.position) / 2
-	#var target_pos = avg + transform.y * desired_offset
-	#var distance = transform.y.dot(target_pos - position)
-	#body.position = lerp(body.position, body.position + body.transform.y * distance, move_speed * delta)
-	
+	body_offset(delta)
 	look_at_player()
 	body_toward_player()
+	
+func body_offset(delta):
+	var avg = (back_leg_target.position + front_leg_target.position) / 2
+	var target_pos = avg + body.transform.y * desired_offset
+	var distance = body.transform.y.dot(target_pos - body.position)
+	body.position.y = lerp(body.position, body.position + body.transform.y * distance, move_speed * delta).y
 	
 func look_at_player():
 	looking_at.global_position = lerp(looking_at.global_position, Player.instance.get_position(), 0.1)
