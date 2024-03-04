@@ -12,7 +12,7 @@ func _process(_delta):
 
 func _on_play_button_pressed():
 	$GameInsert.play()	
-	$MarginContainer/Control/Story.text = "[center]Loading . . ."
+	$MarginContainer/Control/CenterContainer/Story.text = "[center]Loading . . ."
 	$MarginContainer/Control/VBoxContainer/PlayButton.visible = false
 
 func _on_game_insert_finished():
