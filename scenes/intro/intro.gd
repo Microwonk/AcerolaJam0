@@ -16,4 +16,4 @@ func _on_play_button_pressed():
 	$MarginContainer/Control/VBoxContainer/PlayButton.visible = false
 
 func _on_game_insert_finished():
-	Game.change_scene_to_file("res://scenes/gameplay/Gameplay.tscn")
+	Game.change_scene_to_file("res://scenes/gameplay/gameplay.tscn")

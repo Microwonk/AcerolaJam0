@@ -12,7 +12,7 @@ func _ready():
 
 
 func _on_PlayButton_pressed() -> void:
-	Game.change_scene_to_file("res://scenes/intro/Intro.tscn")
+	Game.change_scene_to_file("res://scenes/intro/intro.tscn")
 
 
 func _on_ExitButton_pressed() -> void:
