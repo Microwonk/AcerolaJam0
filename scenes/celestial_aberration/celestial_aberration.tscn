@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/celestial_aberration/celestial_aberration.gd" id="1_5uy6q"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/ik_target.gd" id="2_jq0vq"]
-[ext_resource type="Texture2D" uid="uid://bab2euxhn777p" path="res://assets/Celestial_Aberrant_Pieces.png" id="2_rt3wt"]
+[ext_resource type="Texture2D" uid="uid://bab2euxhn777p" path="res://assets/sprites/Celestial_Aberrant_Pieces.png" id="2_rt3wt"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/soup_stack.gd" id="3_wt7dq"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/soup_sub_stack.gd" id="4_oj4oi"]
 [ext_resource type="Script" path="res://addons/ropesim/Rope.gd" id="4_ryj5u"]

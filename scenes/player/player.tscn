@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b0lhb0ulxkuyf"]
+[gd_scene load_steps=8 format=3 uid="uid://b0lhb0ulxkuyf"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_fmtmv"]
 [ext_resource type="SpriteFrames" uid="uid://ddtgkg4xs1d6m" path="res://resources/animations/player_sprite_frames.tres" id="1_gjsc8"]
 [ext_resource type="Texture2D" uid="uid://c4pxtq7wfqqc5" path="res://assets/sprites/point_light.png" id="3_eaq7n"]
 [ext_resource type="AudioStream" uid="uid://djlyypt5kv1wl" path="res://assets/sound/flash_light.wav" id="3_xpoyx"]
 [ext_resource type="AudioStream" uid="uid://fpmnwgcjh1rt" path="res://assets/sound/step.wav" id="5_k4qvb"]
+[ext_resource type="AudioStream" uid="uid://5kdxgjws3n0b" path="res://assets/sound/jump.wav" id="6_agp3b"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4epx"]
 radius = 6.0
@@ -38,5 +39,9 @@ attenuation = 0.189465
 
 [node name="FootSteps" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_k4qvb")
-volume_db = -40.0
-pitch_scale = 0.8
+volume_db = -30.0
+pitch_scale = 2.5
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_agp3b")
+volume_db = -20.0

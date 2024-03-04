@@ -215,7 +215,8 @@ func animation():
 func sound():
 	match state:
 		PlayerState.JUMPING:
-			print("jump")
+			# this is not done here
+			print("jump")	
 		PlayerState.WALKING:
 			print("walk")
 		PlayerState.RUNNING:
@@ -247,6 +248,7 @@ func jump():
 	jumping = true
 	coyote_timer.stop()
 	$AnimatedSprite2D.play("jump")
+	$Jump.play()
 	jumped.emit(true)
 
 func apply_gravity_multipliers_to(gravity) -> float:
