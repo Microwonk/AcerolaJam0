@@ -61,5 +61,6 @@ func body_toward_player(delta, minimum_offset):
 func _on_hit_box_body_entered(body_entered):
 	if body_entered == Globals.player:
 		# TODO kill player here
-		print("Player ded")
+		print("player ded")
+		# Game.restart_scene()
 		
