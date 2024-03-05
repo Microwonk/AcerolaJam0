@@ -216,16 +216,16 @@ func sound():
 	match state:
 		PlayerState.JUMPING:
 			# this is not done here
-			print("jump")	
+			pass
 		PlayerState.WALKING:
-			print("walk")
+			pass
 		PlayerState.RUNNING:
 			if !$FootSteps.is_playing():
 				$FootSteps.play()
 		PlayerState.IDLE:
-			print("idle")
+			pass
 		PlayerState.FALLING:
-			print("fall")
+			pass
 	
 		
 func start_coyote_timer():

@@ -20,6 +20,8 @@ position = Vector2(15, -7)
 script = ExtResource("1_5uy6q")
 
 [node name="HitBox" type="Area2D" parent="."]
+position = Vector2(0, 2)
+scale = Vector2(0.935816, 1.03731)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
@@ -393,8 +395,8 @@ remote_path = NodePath("../../../../parts/Head/Head/Ropes/Rope")
 script = ExtResource("8_eceil")
 
 [node name="LegBRay" type="RayCast2D" parent="StepTargets" node_paths=PackedStringArray("step_target")]
-position = Vector2(-16, 11)
-target_position = Vector2(0, 90)
+position = Vector2(-3, 14)
+target_position = Vector2(-4, 45)
 hit_from_inside = true
 script = ExtResource("7_56yno")
 step_target = NodePath("LegBStepTarget")
@@ -403,8 +405,8 @@ step_target = NodePath("LegBStepTarget")
 position = Vector2(0, 19)
 
 [node name="LegFRay" type="RayCast2D" parent="StepTargets" node_paths=PackedStringArray("step_target")]
-position = Vector2(-28, 11)
-target_position = Vector2(0, 90)
+position = Vector2(-15, 14)
+target_position = Vector2(-4, 45)
 hit_from_inside = true
 script = ExtResource("7_56yno")
 step_target = NodePath("LegFStepTarget")

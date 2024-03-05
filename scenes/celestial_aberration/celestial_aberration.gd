@@ -13,12 +13,15 @@ extends Node2D
 @export var lerp_factor_body: float = 0.01
 @export var lerp_factor_head: float = 0.3
 
+func _ready():
+	$LegBIKTarget.global_position = global_position
+	$LegFIKTarget.global_position = global_position
+	$StepTargets.global_position.y = avg_legs().y - 20
+
 func _physics_process(delta):
 	# most minimal AI I can imagine
 	global_position.x += sign(Globals.player.global_position.x - global_position.x) * move_speed * delta
-	
-func _process(delta):
-	#offset(delta, neck_target, 25)
+	$StepTargets.global_position.y = avg_legs().y - 20
 	body_toward_player(delta, 25)	
 	offset(delta, body, body_offset)
 	look_at_player()

@@ -23,7 +23,6 @@ ease = 2
 script = ExtResource("1_dh8hj")
 
 [node name="PauseLayer" parent="." instance=ExtResource("3_jw37y")]
-visible = false
 
 [node name="Level" parent="." instance=ExtResource("3_h6r5k")]
 
