@@ -17,7 +17,8 @@ script = ExtResource("1_fmtmv")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -32)
 sprite_frames = ExtResource("1_gjsc8")
-animation = &"fall"
+animation = &"climb"
+frame_progress = 0.28718
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)

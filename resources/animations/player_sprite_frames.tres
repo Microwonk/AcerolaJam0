@@ -1,6 +1,14 @@
-[gd_resource type="SpriteFrames" load_steps=39 format=3 uid="uid://ddtgkg4xs1d6m"]
+[gd_resource type="SpriteFrames" load_steps=41 format=3 uid="uid://ddtgkg4xs1d6m"]
 
 [ext_resource type="Texture2D" uid="uid://c6fftnla5evk6" path="res://assets/sprites/player.png" id="1_k65f0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eaff6"]
+atlas = ExtResource("1_k65f0")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3tadd"]
+atlas = ExtResource("1_k65f0")
+region = Rect2(64, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lfs4s"]
 atlas = ExtResource("1_k65f0")
@@ -152,6 +160,17 @@ region = Rect2(704, 0, 64, 64)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eaff6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3tadd")
+}],
+"loop": true,
+"name": &"climb",
+"speed": 3.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lfs4s")

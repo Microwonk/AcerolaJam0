@@ -13,8 +13,11 @@ func _process(delta):
 
 func _on_chain_body_entered(body):
 	if body == Globals.player:
-		print("entered ladder")
+		body.can_climb = true
+		print(body.can_climb)				
 
 func _on_chain_body_exited(body):
 	if body == Globals.player:
-		print("exited ladder")
+		body.can_climb = false
+		print(body.can_climb)
+		

@@ -7,6 +7,8 @@ signal hit_ground()
 @export var input_jump: String = "jump"
 @export var input_sneak: String = "sneak"
 @export var input_light: String = "light"
+@export var input_climb: String = "climb"
+@export var input_down: String = "down"
 
 const DEFAULT_MAX_JUMP_HEIGHT: float = 50
 const DEFAULT_MIN_JUMP_HEIGHT: float = 30
@@ -21,7 +23,8 @@ enum PlayerState {
 	WALKING, 
 	RUNNING, 
 	JUMPING, 
-	FALLING 
+	FALLING,
+	CLIMBING
 }
 
 enum LookingState {
@@ -73,6 +76,7 @@ var _jump_duration: float = DEFAULT_JUMP_DURATION
 @export var can_hold_jump: bool = false
 @export var coyote_time: float = 0.01
 @export var jump_buffer: float = 0.1
+@export var climb_speed: float = 3000
 
 var default_gravity: float
 var jump_velocity: float
@@ -80,6 +84,7 @@ var double_jump_velocity: float
 var release_gravity_multiplier: float
 var holding_jump := false
 var sneaking := false
+var can_climb := false
 var _was_on_ground: bool
 var acc = Vector2()
 
@@ -119,7 +124,10 @@ func _input(_event):
 		light_state = Light.ON if light_state == Light.OFF else Light.OFF
 		$PlayerLight.texture_scale = LIGHT_DEACTIVATED_SIZE if light_state == Light.OFF else LIGHT_ACTIVATED_SIZE
 	
-	acc.x = 0
+	acc.x = 0	
+	if can_climb:
+		acc.y = 0
+		
 	if Input.is_action_pressed(input_left):
 		acc.x = -max_acceleration
 	
@@ -131,6 +139,14 @@ func _input(_event):
 		start_jump_buffer_timer()
 		if !can_hold_jump and can_jump():
 			jump()
+			
+	if Input.is_action_pressed(input_climb):
+		if can_climb:
+			state = PlayerState.CLIMBING
+		
+	if Input.is_action_pressed(input_down):
+		if can_climb:
+			state = PlayerState.CLIMBING
 		
 	if Input.is_action_just_released(input_jump):
 		holding_jump = false
@@ -158,9 +174,12 @@ func _physics_process(delta):
 		if can_jump() and can_hold_jump:
 			jump()
 
-	var gravity = apply_gravity_multipliers_to(default_gravity)
-	acc.y = gravity
-
+	if !can_climb:
+		var gravity = apply_gravity_multipliers_to(default_gravity)
+		acc.y = gravity
+	else:
+		velocity.y = (-climb_speed if Input.is_action_pressed(input_climb) else climb_speed if Input.is_action_pressed(input_down) else 0) * delta
+		
 	# Apply friction
 	velocity.x *= 1 / (1 + (delta * friction))
 	velocity += acc * delta
@@ -191,6 +210,8 @@ func classify_state():
 		state = PlayerState.JUMPING
 	if velocity.y > 0 and not is_on_floor():
 		state = PlayerState.FALLING
+	if can_climb:
+		state = PlayerState.CLIMBING
 		
 # animates the player based on state
 func animation():
@@ -211,6 +232,8 @@ func animation():
 			$AnimatedSprite2D.animation = "idle"
 		PlayerState.FALLING:
 			$AnimatedSprite2D.animation = "fall"
+		PlayerState.CLIMBING:
+			$AnimatedSprite2D.animation = "climb"
 			
 func sound():
 	match state:
@@ -225,6 +248,8 @@ func sound():
 		PlayerState.IDLE:
 			pass
 		PlayerState.FALLING:
+			pass
+		PlayerState.CLIMBING:
 			pass
 	
 		
@@ -241,7 +266,7 @@ func is_jump_buffer_timer_running():
 	return not jump_buffer_timer.is_stopped()
 
 func can_jump() -> bool:
-	return is_on_floor() or is_coyote_timer_running()
+	return (is_on_floor() or is_coyote_timer_running()) and !can_climb
 
 func jump():
 	velocity.y = -jump_velocity
