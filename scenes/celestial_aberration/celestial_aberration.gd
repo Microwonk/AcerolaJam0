@@ -22,6 +22,7 @@ func _physics_process(delta):
 	# most minimal AI I can imagine
 	global_position.x += sign(Globals.player.global_position.x - global_position.x) * move_speed * delta
 	$StepTargets.global_position.y = avg_legs().y - 20
+	$HitBox.global_position.y = avg_legs().y - 20
 	body_toward_player(delta, 25)	
 	offset(delta, body, body_offset)
 	look_at_player()

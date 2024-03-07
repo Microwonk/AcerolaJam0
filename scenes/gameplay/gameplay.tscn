@@ -27,13 +27,13 @@ script = ExtResource("1_dh8hj")
 [node name="Level" parent="." instance=ExtResource("3_h6r5k")]
 
 [node name="Player" parent="." instance=ExtResource("4_i7jtx")]
-position = Vector2(79, 572)
+position = Vector2(76, 571)
 
 [node name="CelestialAberration" parent="." instance=ExtResource("5_ltuec")]
 position = Vector2(226, 542)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(79, 542)
+position = Vector2(76, 541)
 zoom = Vector2(2, 2)
 limit_smoothed = true
 position_smoothing_speed = 5.2
@@ -57,7 +57,7 @@ grow_vertical = 2
 script = ExtResource("7_rcj2f")
 
 [node name="PhantomCamera2D" type="Node2D" parent="."]
-position = Vector2(79, 542)
+position = Vector2(76, 541)
 script = ExtResource("8_pw47b")
 priority_override = false
 priority = 5

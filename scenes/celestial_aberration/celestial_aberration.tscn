@@ -29,6 +29,13 @@ position = Vector2(-18, 7)
 shape = SubResource("RectangleShape2D_1bvs5")
 debug_color = Color(0.498039, 0.580392, 0, 0.419608)
 
+[node name="ColorRect" type="ColorRect" parent="HitBox"]
+offset_left = -18.166
+offset_top = 2.8921
+offset_right = 21.834
+offset_bottom = 42.8921
+scale = Vector2(0.137545, 0.137545)
+
 [node name="LegBIKTarget" type="Marker2D" parent="." node_paths=PackedStringArray("step_target", "other")]
 top_level = true
 position = Vector2(11, 23)
@@ -60,7 +67,7 @@ position = Vector2(-21, 4)
 [node name="LegF" type="Node" parent="parts"]
 
 [node name="Upper" type="Sprite2D" parent="parts/LegF"]
-position = Vector2(-0.428298, 8.38635)
+position = Vector2(-0.428295, 8.38635)
 rotation = -1.09461
 scale = Vector2(0.999997, 0.999997)
 texture = ExtResource("2_rt3wt")
@@ -69,7 +76,7 @@ region_enabled = true
 region_rect = Rect2(50.4037, 81.5392, 15.2697, 14.7292)
 
 [node name="Lower" type="Sprite2D" parent="parts/LegF"]
-position = Vector2(-0.136338, 9.98673)
+position = Vector2(-0.136334, 9.98673)
 rotation = 0.142718
 scale = Vector2(0.999995, 0.999995)
 texture = ExtResource("2_rt3wt")
@@ -78,8 +85,8 @@ region_enabled = true
 region_rect = Rect2(51, 82, 14, 14)
 
 [node name="Foot" type="Sprite2D" parent="parts/LegF"]
-position = Vector2(-8.49326, 20.9884)
-rotation = 0.00111555
+position = Vector2(-8.49326, 20.9883)
+rotation = 0.00111628
 scale = Vector2(0.999995, 0.999995)
 texture = ExtResource("2_rt3wt")
 centered = false
@@ -301,7 +308,7 @@ remote_path = NodePath("../../../../parts/LegB/Upper")
 
 [node name="LowerB" type="Bone2D" parent="skeleton/Body/UpperB"]
 position = Vector2(-15.0016, -7.56843)
-rotation = 2.59473
+rotation = 2.59474
 scale = Vector2(0.999999, 0.999999)
 rest = Transform2D(-0.854161, 0.520006, -0.520006, -0.854161, -15.0016, -7.56843)
 editor_settings/show_bone_gizmo = false
@@ -349,7 +356,8 @@ remote_path = NodePath("../../../../../parts/LegF/Lower")
 
 [node name="FootF" type="Bone2D" parent="skeleton/Body/UpperF/LowerF"]
 position = Vector2(-11.9412, 11.7647)
-rotation = -0.141602
+rotation = -0.141601
+scale = Vector2(1, 1)
 rest = Transform2D(0.989991, -0.141129, 0.141129, 0.989991, -11.9412, 11.7647)
 auto_calculate_length_and_angle = false
 length = 4.0
