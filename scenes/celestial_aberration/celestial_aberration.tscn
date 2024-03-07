@@ -357,7 +357,6 @@ remote_path = NodePath("../../../../../parts/LegF/Lower")
 [node name="FootF" type="Bone2D" parent="skeleton/Body/UpperF/LowerF"]
 position = Vector2(-11.9412, 11.7647)
 rotation = -0.141601
-scale = Vector2(1, 1)
 rest = Transform2D(0.989991, -0.141129, 0.141129, 0.989991, -11.9412, 11.7647)
 auto_calculate_length_and_angle = false
 length = 4.0
