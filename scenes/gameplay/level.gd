@@ -1,16 +1,6 @@
 extends Node2D
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-	
-func _physics_process(delta):
+func _physics_process(_delta):
 	var swivel_speed = 0.5
 
 	var amplitude = 5
@@ -26,10 +16,19 @@ func _physics_process(delta):
 func _on_chain_body_entered(body):
 	if body == Globals.player:
 		body.can_climb = true
-		print(body.can_climb)				
 
 func _on_chain_body_exited(body):
 	if body == Globals.player:
 		body.can_climb = false
-		print(body.can_climb)
 		
+
+
+func _on_break_floor_body_entered(body):
+	if body == Globals.player:
+		if $BreakableFloor:
+			$BreakableFloor.queue_free()
+			$FloorParticles.emitting = true
+			$Explosion.play()
+
+func _on_win_body_entered(body):
+	pass # Replace with function body.

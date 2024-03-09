@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/Modifications/soup_look_at.gd" id="6_1na2o"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/step_ray.gd" id="7_56yno"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/step_targets.gd" id="8_eceil"]
-[ext_resource type="AudioStream" uid="uid://bl4ekhmqjacj3" path="res://assets/sound/clicking.wav" id="11_1c25g"]
+[ext_resource type="AudioStream" uid="uid://dexgrgtfsv6p7" path="res://assets/sound/aberrant.mp3" id="11_srb23"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvs5"]
 size = Vector2(56, 46)
@@ -30,11 +30,19 @@ shape = SubResource("RectangleShape2D_1bvs5")
 debug_color = Color(0.498039, 0.580392, 0, 0.419608)
 
 [node name="ColorRect" type="ColorRect" parent="HitBox"]
+visible = false
 offset_left = -18.166
 offset_top = 2.8921
 offset_right = 21.834
 offset_bottom = 42.8921
 scale = Vector2(0.137545, 0.137545)
+
+[node name="Noises" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-15, 7)
+stream = ExtResource("11_srb23")
+volume_db = -50.0
+autoplay = true
+max_distance = 500.0
 
 [node name="LegBIKTarget" type="Marker2D" parent="." node_paths=PackedStringArray("step_target", "other")]
 top_level = true
@@ -67,7 +75,7 @@ position = Vector2(-21, 4)
 [node name="LegF" type="Node" parent="parts"]
 
 [node name="Upper" type="Sprite2D" parent="parts/LegF"]
-position = Vector2(-0.428295, 8.38635)
+position = Vector2(-0.428298, 8.38635)
 rotation = -1.09461
 scale = Vector2(0.999997, 0.999997)
 texture = ExtResource("2_rt3wt")
@@ -76,7 +84,7 @@ region_enabled = true
 region_rect = Rect2(50.4037, 81.5392, 15.2697, 14.7292)
 
 [node name="Lower" type="Sprite2D" parent="parts/LegF"]
-position = Vector2(-0.136334, 9.98673)
+position = Vector2(-0.136338, 9.98673)
 rotation = 0.142718
 scale = Vector2(0.999995, 0.999995)
 texture = ExtResource("2_rt3wt")
@@ -85,8 +93,8 @@ region_enabled = true
 region_rect = Rect2(51, 82, 14, 14)
 
 [node name="Foot" type="Sprite2D" parent="parts/LegF"]
-position = Vector2(-8.49326, 20.9883)
-rotation = 0.00111628
+position = Vector2(-8.49326, 20.9884)
+rotation = 0.00111555
 scale = Vector2(0.999995, 0.999995)
 texture = ExtResource("2_rt3wt")
 centered = false
@@ -308,7 +316,7 @@ remote_path = NodePath("../../../../parts/LegB/Upper")
 
 [node name="LowerB" type="Bone2D" parent="skeleton/Body/UpperB"]
 position = Vector2(-15.0016, -7.56843)
-rotation = 2.59474
+rotation = 2.59473
 scale = Vector2(0.999999, 0.999999)
 rest = Transform2D(-0.854161, 0.520006, -0.520006, -0.854161, -15.0016, -7.56843)
 editor_settings/show_bone_gizmo = false
@@ -356,7 +364,7 @@ remote_path = NodePath("../../../../../parts/LegF/Lower")
 
 [node name="FootF" type="Bone2D" parent="skeleton/Body/UpperF/LowerF"]
 position = Vector2(-11.9412, 11.7647)
-rotation = -0.141601
+rotation = -0.141602
 rest = Transform2D(0.989991, -0.141129, 0.141129, 0.989991, -11.9412, 11.7647)
 auto_calculate_length_and_angle = false
 length = 4.0
@@ -402,7 +410,7 @@ remote_path = NodePath("../../../../parts/Head/Head/Ropes/Rope")
 script = ExtResource("8_eceil")
 
 [node name="LegBRay" type="RayCast2D" parent="StepTargets" node_paths=PackedStringArray("step_target")]
-position = Vector2(-1, 1)
+position = Vector2(-3, 0)
 target_position = Vector2(0, 60)
 script = ExtResource("7_56yno")
 step_target = NodePath("LegBStepTarget")
@@ -411,6 +419,7 @@ step_target = NodePath("LegBStepTarget")
 position = Vector2(0, 19)
 
 [node name="Line2D" type="Line2D" parent="StepTargets/LegBRay"]
+visible = false
 points = PackedVector2Array(0, 0, 0, 59)
 width = 1.0
 
@@ -424,13 +433,8 @@ step_target = NodePath("LegFStepTarget")
 position = Vector2(0, 19)
 
 [node name="Line2D" type="Line2D" parent="StepTargets/LegFRay"]
+visible = false
 points = PackedVector2Array(0, 0, 0, 59)
 width = 1.0
-
-[node name="Clicking" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("11_1c25g")
-volume_db = -10.0
-pitch_scale = 0.01
-autoplay = true
 
 [connection signal="body_entered" from="HitBox" to="." method="_on_hit_box_body_entered"]

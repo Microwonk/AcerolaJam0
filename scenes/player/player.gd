@@ -1,6 +1,7 @@
 extends CharacterBody2D
 signal jumped(is_ground_jump: bool)
 signal hit_ground()
+signal died()
 
 @export var input_left: String = "move_left"
 @export var input_right: String = "move_right"
@@ -93,6 +94,9 @@ var state: PlayerState = PlayerState.IDLE
 var looking_state: LookingState = LookingState.RIGHT
 var light_state: Light = Light.ON
 var jumping = false
+
+func is_light_on():
+	return light_state == Light.ON
 
 @onready var coyote_timer = Timer.new()
 @onready var jump_buffer_timer = Timer.new()
@@ -275,6 +279,11 @@ func jump():
 	$AnimatedSprite2D.play("jump")
 	$Jump.play()
 	jumped.emit(true)
+	
+func die():
+	$DeathParticles.emitting = true
+	await get_tree().create_timer(0.01).timeout
+	died.emit()
 
 func apply_gravity_multipliers_to(gravity) -> float:
 	if velocity.y * sign(default_gravity) > 0: # If we are falling

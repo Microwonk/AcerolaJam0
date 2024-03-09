@@ -5,13 +5,13 @@ extends Control
 
 
 func _ready():
-	# needed for gamepads to work
-	# btn_play.grab_focus()
 	if OS.has_feature('web'):
 		btn_exit.queue_free() # exit button dosn't make sense on HTML5
+	$AudioStreamPlayer.play()
 
 
 func _on_PlayButton_pressed() -> void:
+	$AudioStreamPlayer.stop()
 	Game.change_scene_to_file("res://scenes/intro/intro.tscn")
 
 
@@ -25,3 +25,4 @@ func _on_ExitButton_pressed() -> void:
 		await transitions.anim.animation_finished
 		await get_tree().create_timer(0.3).timeout
 	get_tree().quit()
+	$AudioStreamPlayer.stop()	

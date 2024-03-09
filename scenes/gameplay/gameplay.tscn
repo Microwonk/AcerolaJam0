@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://4fyoq8npekf0"]
+[gd_scene load_steps=13 format=3 uid="uid://4fyoq8npekf0"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="1_dh8hj"]
+[ext_resource type="PackedScene" uid="uid://by3obw3cqucjc" path="res://scenes/gameplay/death_screen/deathscreen.tscn" id="2_8sj70"]
 [ext_resource type="PackedScene" uid="uid://udvvfv7li3or" path="res://scenes/gameplay/level.tscn" id="3_h6r5k"]
-[ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pauselayer/Pauselayer.tscn" id="3_jw37y"]
+[ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pauselayer/pauselayer.tscn" id="3_jw37y"]
 [ext_resource type="PackedScene" uid="uid://b0lhb0ulxkuyf" path="res://scenes/player/player.tscn" id="4_i7jtx"]
 [ext_resource type="PackedScene" uid="uid://h4w7o8n67aqc" path="res://scenes/celestial_aberration/celestial_aberration.tscn" id="5_ltuec"]
 [ext_resource type="Shader" path="res://assets/shaders/CRT.gdshader" id="6_o52xc"]
@@ -22,6 +23,8 @@ ease = 2
 [node name="Gameplay" type="Node"]
 script = ExtResource("1_dh8hj")
 
+[node name="Deathscreen" parent="." instance=ExtResource("2_8sj70")]
+
 [node name="PauseLayer" parent="." instance=ExtResource("3_jw37y")]
 
 [node name="Level" parent="." instance=ExtResource("3_h6r5k")]
@@ -29,8 +32,29 @@ script = ExtResource("1_dh8hj")
 [node name="Player" parent="." instance=ExtResource("4_i7jtx")]
 position = Vector2(76, 571)
 
-[node name="CelestialAberration" parent="." instance=ExtResource("5_ltuec")]
-position = Vector2(226, 542)
+[node name="CATrickster" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(633, -65)
+scale = Vector2(-1, 1)
+
+[node name="CAHoleRight" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(2941, 125)
+scale = Vector2(-1, 1)
+
+[node name="CAHoleLeft" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(2523, 115)
+scale = Vector2(-1, 1)
+
+[node name="CASecret" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(2876, 366)
+
+[node name="CAFast" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(1148, 340)
+scale = Vector2(-1, 1)
+move_speed = 40.0
+
+[node name="CAStalker" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(1206, 564)
+move_speed = 2.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(76, 541)
@@ -84,3 +108,5 @@ inactive_update_mode = 0
 z_index = 1
 position = Vector2(-482, -327)
 color = Color(0, 0, 0, 1)
+
+[connection signal="died" from="Player" to="Deathscreen" method="_on_player_died"]

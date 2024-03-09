@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b0lhb0ulxkuyf"]
+[gd_scene load_steps=9 format=3 uid="uid://b0lhb0ulxkuyf"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_fmtmv"]
 [ext_resource type="SpriteFrames" uid="uid://ddtgkg4xs1d6m" path="res://resources/animations/player_sprite_frames.tres" id="1_gjsc8"]
@@ -10,6 +10,16 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4epx"]
 radius = 6.0
 height = 16.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iim1a"]
+emission_shape = 1
+emission_sphere_radius = 30.42
+radial_velocity_max = 103.45
+gravity = Vector3(0, 20, 0)
+scale_min = 5.0
+scale_max = 20.0
+color = Color(0.235294, 0.00784314, 0.0117647, 1)
+turbulence_enabled = true
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_fmtmv")
@@ -45,3 +55,8 @@ pitch_scale = 2.5
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_agp3b")
 volume_db = -20.0
+
+[node name="DeathParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 200
+process_material = SubResource("ParticleProcessMaterial_iim1a")

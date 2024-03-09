@@ -12,6 +12,7 @@ extends Node2D
 @export var lerp_factor_flip: float = 0.05
 @export var lerp_factor_body: float = 0.01
 @export var lerp_factor_head: float = 0.3
+@export var max_follow_distance: float = 500.0
 
 func _ready():
 	$LegBIKTarget.global_position = global_position
@@ -20,14 +21,21 @@ func _ready():
 
 func _physics_process(delta):
 	# most minimal AI I can imagine
-	global_position.x += sign(Globals.player.global_position.x - global_position.x) * move_speed * delta
-	$StepTargets.global_position.y = avg_legs().y - 20
-	$HitBox.global_position.y = avg_legs().y - 20
+	player_follow(delta)
+	adjust_y()
 	body_toward_player(delta, 25)	
 	offset(delta, body, body_offset)
 	look_at_player()
 	
-# to function in case i need to offset something else as well
+func adjust_y():
+	$StepTargets.global_position.y = avg_legs().y - 20
+	$HitBox.global_position.y = avg_legs().y - 20
+	
+func player_follow(delta):
+	var distance = global_position.distance_to(Globals.player.global_position)
+	if Globals.player.is_light_on() and distance < max_follow_distance:
+		global_position.x += sign(Globals.player.global_position.x - global_position.x) * move_speed * delta	
+	
 func offset(delta, element, desired_offset):
 	var avg = avg_legs()
 	var target_pos = avg + element.transform.y * -desired_offset
@@ -43,7 +51,7 @@ func look_at_player():
 	
 func flip_horizontally():
 	var player_position = Globals.player.global_position
-	const distance_threshold = 5
+	const distance_threshold = 50
 	var distance_to_player = abs(player_position.x - global_position.x)
 
 	if distance_to_player > distance_threshold:
@@ -64,7 +72,5 @@ func body_toward_player(delta, minimum_offset):
 	
 func _on_hit_box_body_entered(body_entered):
 	if body_entered == Globals.player:
-		# TODO kill player here
-		print("player ded")
-		# Game.restart_scene()
+		body_entered.die()
 		

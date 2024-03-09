@@ -6,7 +6,7 @@ extends CanvasLayer
 @onready var pause_options = $MarginContainer/Control/VBoxOptions
 @onready var color_rect = $ColorRect
 
-@onready var nodes_grp1 = [pause_button] # should be visible during gamemplay and hidden during pause
+@onready var nodes_grp1 = [pause_button] # should be visible during gameplay and hidden during pause
 @onready var nodes_grp2 = [pause_options, color_rect] # should be visible only in pause menu
 
 
@@ -42,12 +42,14 @@ func _unhandled_input(event):
 
 func resume():
 	get_tree().paused = false
+	$AudioStreamPlayer.stop()
 	pause_hide()
 
 
 func pause_game():
 	resume_option.grab_focus()
 	get_tree().paused = true
+	$AudioStreamPlayer.play()
 	pause_show()
 
 
