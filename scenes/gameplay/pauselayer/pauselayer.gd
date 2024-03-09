@@ -32,12 +32,16 @@ func pause_hide():
 
 
 func _unhandled_input(event):
-	if event.is_action_pressed("pause"):
-		if get_tree().paused:
+	if Globals.phantom_dead:
+		if event.is_action_pressed("pause"):
 			resume()
-		else:
-			pause_game()
-		get_viewport().set_input_as_handled()
+	else:
+		if event.is_action_pressed("pause"):
+			if get_tree().paused:
+				resume()
+			else:
+				pause_game()
+			get_viewport().set_input_as_handled()
 
 
 func resume():

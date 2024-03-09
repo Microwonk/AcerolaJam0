@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://4fyoq8npekf0"]
+[gd_scene load_steps=14 format=3 uid="uid://4fyoq8npekf0"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="1_dh8hj"]
 [ext_resource type="PackedScene" uid="uid://by3obw3cqucjc" path="res://scenes/gameplay/death_screen/deathscreen.tscn" id="2_8sj70"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b0lhb0ulxkuyf" path="res://scenes/player/player.tscn" id="4_i7jtx"]
 [ext_resource type="PackedScene" uid="uid://h4w7o8n67aqc" path="res://scenes/celestial_aberration/celestial_aberration.tscn" id="5_ltuec"]
 [ext_resource type="Shader" path="res://assets/shaders/CRT.gdshader" id="6_o52xc"]
+[ext_resource type="Texture2D" uid="uid://bab2euxhn777p" path="res://assets/sprites/Celestial_Aberrant_Pieces.png" id="7_14pew"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_rcj2f"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2D.gd" id="8_pw47b"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="9_6cml5"]
@@ -52,9 +53,97 @@ position = Vector2(1148, 340)
 scale = Vector2(-1, 1)
 move_speed = 40.0
 
-[node name="CAStalker" parent="." instance=ExtResource("5_ltuec")]
-position = Vector2(1206, 564)
-move_speed = 2.0
+[node name="CAStalker" type="Node2D" parent="."]
+position = Vector2(1184, 552)
+
+[node name="parts" type="Node2D" parent="CAStalker"]
+
+[node name="LegF" type="Node2D" parent="CAStalker/parts"]
+
+[node name="Upper" type="Sprite2D" parent="CAStalker/parts/LegF"]
+position = Vector2(-0.999954, 11)
+rotation = -0.623693
+scale = Vector2(0.999997, 0.999997)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(50.4037, 81.5392, 15.2697, 14.7292)
+
+[node name="Lower" type="Sprite2D" parent="CAStalker/parts/LegF"]
+position = Vector2(-0.999985, 11)
+rotation = 0.688084
+scale = Vector2(0.999995, 0.999995)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(51, 82, 14, 14)
+
+[node name="Foot" type="Sprite2D" parent="CAStalker/parts/LegF"]
+position = Vector2(-15, 20)
+scale = Vector2(0.999995, 0.999995)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(41, 99, 11, 5)
+
+[node name="LegB" type="Node2D" parent="CAStalker/parts"]
+
+[node name="Upper" type="Sprite2D" parent="CAStalker/parts/LegB"]
+position = Vector2(2.00006, 14)
+rotation = -0.799043
+scale = Vector2(0.999997, 0.999997)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(50.4037, 81.5392, 15.2697, 14.7292)
+
+[node name="Lower" type="Sprite2D" parent="CAStalker/parts/LegB"]
+position = Vector2(0.999999, 16)
+rotation = 0.36162
+scale = Vector2(0.999996, 0.999996)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(51, 82, 14, 14)
+
+[node name="Foot" type="Sprite2D" parent="CAStalker/parts/LegB"]
+position = Vector2(-8.99996, 32)
+rotation = 3.14159
+scale = Vector2(-1, 1)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(41, 99, 11, 5)
+
+[node name="Body" type="Node2D" parent="CAStalker/parts"]
+
+[node name="Body" type="Sprite2D" parent="CAStalker/parts/Body"]
+position = Vector2(-23, -3.99998)
+rotation = 0.179088
+scale = Vector2(0.999998, 0.999998)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(12, 54, 36, 22)
+
+[node name="Neck" type="Sprite2D" parent="CAStalker/parts/Body"]
+position = Vector2(-26, -0.999993)
+rotation = 0.0106869
+scale = Vector2(0.999996, 0.999996)
+texture = ExtResource("7_14pew")
+centered = false
+region_enabled = true
+region_rect = Rect2(14, 85, 9, 13)
+
+[node name="Head" type="Node2D" parent="CAStalker/parts"]
+
+[node name="Head" type="Sprite2D" parent="CAStalker/parts/Head"]
+position = Vector2(-18, -4.99998)
+rotation = -0.00211442
+scale = Vector2(0.999995, 0.999995)
+texture = ExtResource("7_14pew")
+region_enabled = true
+region_rect = Rect2(62, 19, 27, 21)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(76, 541)

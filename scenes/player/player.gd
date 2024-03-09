@@ -281,8 +281,11 @@ func jump():
 	jumped.emit(true)
 	
 func die():
+	if Globals.phantom_dead:
+		return
 	$DeathParticles.emitting = true
-	await get_tree().create_timer(0.01).timeout
+	Globals.phantom_dead = true
+	await get_tree().create_timer(0.07).timeout
 	died.emit()
 
 func apply_gravity_multipliers_to(gravity) -> float:

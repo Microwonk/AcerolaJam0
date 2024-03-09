@@ -32,8 +32,9 @@ func adjust_y():
 	$HitBox.global_position.y = avg_legs().y - 20
 	
 func player_follow(delta):
+	var is_looking_at_wall = $FrontDetector.is_colliding()
 	var distance = global_position.distance_to(Globals.player.global_position)
-	if Globals.player.is_light_on() and distance < max_follow_distance:
+	if Globals.player.is_light_on() and distance < max_follow_distance and !is_looking_at_wall:
 		global_position.x += sign(Globals.player.global_position.x - global_position.x) * move_speed * delta	
 	
 func offset(delta, element, desired_offset):

@@ -1,16 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://h4w7o8n67aqc"]
+[gd_scene load_steps=12 format=3 uid="uid://h4w7o8n67aqc"]
 
 [ext_resource type="Script" path="res://scenes/celestial_aberration/celestial_aberration.gd" id="1_5uy6q"]
+[ext_resource type="AudioStream" uid="uid://dacjd1bccjq5m" path="res://assets/sound/aberrant.wav" id="2_a7qo0"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/ik_target.gd" id="2_jq0vq"]
 [ext_resource type="Texture2D" uid="uid://bab2euxhn777p" path="res://assets/sprites/Celestial_Aberrant_Pieces.png" id="2_rt3wt"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/soup_stack.gd" id="3_wt7dq"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/soup_sub_stack.gd" id="4_oj4oi"]
-[ext_resource type="Script" path="res://addons/ropesim/Rope.gd" id="4_ryj5u"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/Modifications/soup_two_bone_ik.gd" id="5_add7p"]
 [ext_resource type="Script" path="res://addons/Souperior 2D Skeleton Modifications/Animatinators/Modifications/soup_look_at.gd" id="6_1na2o"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/step_ray.gd" id="7_56yno"]
 [ext_resource type="Script" path="res://scenes/celestial_aberration/step_targets.gd" id="8_eceil"]
-[ext_resource type="AudioStream" uid="uid://dexgrgtfsv6p7" path="res://assets/sound/aberrant.mp3" id="11_srb23"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvs5"]
 size = Vector2(56, 46)
@@ -39,7 +38,7 @@ scale = Vector2(0.137545, 0.137545)
 
 [node name="Noises" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(-15, 7)
-stream = ExtResource("11_srb23")
+stream = ExtResource("2_a7qo0")
 volume_db = -50.0
 autoplay = true
 max_distance = 500.0
@@ -158,76 +157,6 @@ scale = Vector2(0.999995, 0.999995)
 texture = ExtResource("2_rt3wt")
 region_enabled = true
 region_rect = Rect2(62, 19, 27, 21)
-
-[node name="Ropes" type="Node" parent="parts/Head/Head"]
-
-[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes"]
-light_mask = 2
-visibility_layer = 2
-position = Vector2(-5.99997, -16)
-rotation = -1.08657
-scale = Vector2(0.999996, 0.999996)
-script = ExtResource("4_ryj5u")
-rope_length = 30.0
-gravity = -0.1
-damping = 10.0
-line_width = 1.0
-color = Color(0.137255, 0.054902, 0.113725, 1)
-
-[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope"]
-position = Vector2(1.39657, 2.65512)
-rotation = -1.08657
-scale = Vector2(0.999996, 0.999996)
-script = ExtResource("4_ryj5u")
-rope_length = 20.0
-gravity = -0.2
-damping = 10.0
-line_width = 1.0
-color = Color(0.0196078, 0.00392157, 0.0156863, 1)
-
-[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope"]
-position = Vector2(4.22351, -4.37751)
-rotation = -1.08657
-scale = Vector2(0.999996, 0.999996)
-script = ExtResource("4_ryj5u")
-rope_length = 30.0
-gravity = 0.0
-damping = 20.0
-line_width = 1.0
-color = Color(0.0196078, 0.00392157, 0.0156863, 1)
-
-[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope/Rope"]
-position = Vector2(-4.49382, -4.56141)
-rotation = -1.08657
-scale = Vector2(0.999996, 0.999996)
-script = ExtResource("4_ryj5u")
-rope_length = 50.0
-gravity = 0.2
-damping = 10.0
-line_width = 1.0
-color = Color(0.137255, 0.054902, 0.113725, 1)
-
-[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope/Rope/Rope"]
-position = Vector2(1.78993, 4.66872)
-rotation = -1.08657
-scale = Vector2(0.999996, 0.999996)
-script = ExtResource("4_ryj5u")
-rope_length = 40.0
-gravity = 0.1
-damping = 10.0
-line_width = 1.0
-color = Color(0.0196078, 0.00392157, 0.0156863, 1)
-
-[node name="Rope" type="Node2D" parent="parts/Head/Head/Ropes/Rope/Rope/Rope/Rope/Rope"]
-position = Vector2(-2.82252, 0.183525)
-rotation = -1.08657
-scale = Vector2(0.999996, 0.999996)
-script = ExtResource("4_ryj5u")
-rope_length = 20.0
-gravity = -0.01
-damping = 20.0
-line_width = 1.0
-color = Color(0.0196078, 0.00392157, 0.0156863, 1)
 
 [node name="skeleton" type="Skeleton2D" parent="."]
 
@@ -404,7 +333,6 @@ remote_path = NodePath("../../../../../parts/Head/Head")
 
 [node name="RopesRT" type="RemoteTransform2D" parent="skeleton/Body/Neck"]
 position = Vector2(22.5364, 4.22864)
-remote_path = NodePath("../../../../parts/Head/Head/Ropes/Rope")
 
 [node name="StepTargets" type="Node2D" parent="."]
 script = ExtResource("8_eceil")
@@ -436,5 +364,9 @@ position = Vector2(0, 19)
 visible = false
 points = PackedVector2Array(0, 0, 0, 59)
 width = 1.0
+
+[node name="FrontDetector" type="RayCast2D" parent="."]
+position = Vector2(-15, 7)
+target_position = Vector2(-28, 0)
 
 [connection signal="body_entered" from="HitBox" to="." method="_on_hit_box_body_entered"]

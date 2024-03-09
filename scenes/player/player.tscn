@@ -19,6 +19,8 @@ gravity = Vector3(0, 20, 0)
 scale_min = 5.0
 scale_max = 20.0
 color = Color(0.235294, 0.00784314, 0.0117647, 1)
+hue_variation_min = -0.1
+hue_variation_max = 0.1
 turbulence_enabled = true
 
 [node name="Player" type="CharacterBody2D"]
@@ -58,5 +60,5 @@ volume_db = -20.0
 
 [node name="DeathParticles" type="GPUParticles2D" parent="."]
 emitting = false
-amount = 200
+amount = 50
 process_material = SubResource("ParticleProcessMaterial_iim1a")
