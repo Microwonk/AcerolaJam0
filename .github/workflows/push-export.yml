@@ -26,7 +26,7 @@ jobs:
       - name: Windows Build
         run: |
           mkdir -v -p builds/windows
-            godot -e --headless --export-release "Windows Desktop" ./builds/windows/$EXPORT_NAME.exe
+            godot --headless --export-release "Windows Desktop" ./builds/windows/$EXPORT_NAME.exe
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -61,7 +61,7 @@ jobs:
       - name: Linux Build
         run: |
           mkdir -v -p builds/linux
-          godot -e -v --headless --export-release "Linux/X11" ./builds/linux/$EXPORT_NAME.x86_64
+          godot -v --headless --export-release "Linux/X11" ./builds/linux/$EXPORT_NAME.x86_64
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -96,7 +96,7 @@ jobs:
       - name: Web Build
         run: |
           mkdir -v -p builds/web
-          godot -e -v --headless --export-release "Web" ./builds/web/index.html
+          godot -v --headless --export-release "Web" ./builds/web/index.html
       - name: Add COI Service Worker
         run: |
           wget https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.min.js -O ./builds/web/coi-serviceworker.min.js
