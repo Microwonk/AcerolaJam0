@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://rvrvthpbfpwq"]
+[gd_scene load_steps=3 format=3 uid="uid://rvrvthpbfpwq"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/win_screen/winscreen.gd" id="1_ah1l4"]
 [ext_resource type="FontFile" uid="uid://c10t8b5fip0p8" path="res://assets/fonts/MinimalPixelFont.ttf" id="1_gsgkc"]
-[ext_resource type="AudioStream" uid="uid://c0wpf11nw6cmy" path="res://assets/sound/song1.wav" id="3_hkgwl"]
 
 [node name="Winscreen" type="Control"]
 layout_mode = 3
@@ -96,11 +95,6 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("1_gsgkc")
 theme_override_font_sizes/font_size = 20
 text = "(PLAY AGAIN FOR SECRET ENDING)"
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_hkgwl")
-volume_db = -35.0
-autoplay = true
 
 [connection signal="pressed" from="MarginContainer/Control/VBoxOptions/Try again" to="." method="_on_try_again_pressed"]
 [connection signal="pressed" from="MarginContainer/Control/VBoxOptions/MainMenu" to="." method="_on_main_menu_pressed"]

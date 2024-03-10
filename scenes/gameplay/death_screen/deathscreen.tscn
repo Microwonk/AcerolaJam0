@@ -57,7 +57,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_2rkwy")
 theme_override_font_sizes/font_size = 200
-text = "Sacrificed"
+text = "SACRIFICED"
 
 [node name="VBoxOptions" type="VBoxContainer" parent="MarginContainer/Control"]
 layout_mode = 1
@@ -94,6 +94,7 @@ underline = 1
 
 [node name="Death" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_8uiii")
+volume_db = 10.0
 
 [node name="Static" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ln3qj")

@@ -11,17 +11,10 @@
 radius = 6.0
 height = 16.0
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iim1a"]
-emission_shape = 1
-emission_sphere_radius = 30.42
-radial_velocity_max = 103.45
-gravity = Vector3(0, 20, 0)
-scale_min = 5.0
-scale_max = 20.0
-color = Color(0.235294, 0.00784314, 0.0117647, 1)
-hue_variation_min = -0.1
-hue_variation_max = 0.1
-turbulence_enabled = true
+[sub_resource type="Curve" id="Curve_46aex"]
+min_value = -1.0
+_data = [Vector2(0.0114942, -0.373034), 0.0, 0.0, 0, 0, Vector2(0.560345, 0.868539), 0.0, 0.0, 0, 0, Vector2(1, -0.460674), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_fmtmv")
@@ -56,12 +49,20 @@ pitch_scale = 2.4
 
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_agp3b")
-volume_db = -20.0
+volume_db = -30.0
 
-[node name="DeathParticles" type="GPUParticles2D" parent="."]
+[node name="DeathParticles" type="CPUParticles2D" parent="."]
 emitting = false
-amount = 50
-process_material = SubResource("ParticleProcessMaterial_iim1a")
+amount = 30
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+gravity = Vector2(0, 0)
+radial_accel_max = 150.0
+scale_amount_max = 20.0
+color = Color(0.0627451, 0, 0.00392157, 1)
+hue_variation_min = -0.1
+hue_variation_max = 0.1
+hue_variation_curve = SubResource("Curve_46aex")
 
 [node name="Climbing" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_k4qvb")
