@@ -51,8 +51,8 @@ attenuation = 0.189465
 
 [node name="FootSteps" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_k4qvb")
-volume_db = -30.0
-pitch_scale = 2.5
+volume_db = -20.0
+pitch_scale = 2.4
 
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_agp3b")
@@ -62,3 +62,8 @@ volume_db = -20.0
 emitting = false
 amount = 50
 process_material = SubResource("ParticleProcessMaterial_iim1a")
+
+[node name="Climbing" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_k4qvb")
+volume_db = -20.0
+pitch_scale = 4.0

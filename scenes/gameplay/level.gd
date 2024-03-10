@@ -24,4 +24,20 @@ func _on_break_floor_body_entered(body):
 			has_exploded = true
 
 func _on_win_body_entered(body):
-	pass # Replace with function body.
+	if body == Globals.player and !Globals.phantom_dead:
+		trans()
+		Game.change_scene_to_file("res://scenes/gameplay/win_screen/winscreen.tscn", {"show_progress_bar": false})
+		
+func _on_secret_win_body_entered(body):
+	if body == Globals.player:
+		trans()
+		Game.change_scene_to_file("res://scenes/gameplay/secret_win_screen/secretwinscreen.tscn", {"show_progress_bar": false})
+	
+func trans():
+	var transitions = get_node_or_null("/root/Transitions")
+	if transitions:
+		transitions.fade_in({
+			'show_progress_bar': false
+		})
+		await transitions.anim.animation_finished
+		await get_tree().create_timer(0.3).timeout

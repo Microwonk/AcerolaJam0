@@ -171,6 +171,7 @@ func _physics_process(delta):
 		jumping = false
 		if is_jump_buffer_timer_running() and not can_hold_jump: 
 			jump()
+		$FootSteps.play()
 		hit_ground.emit()
 
 	# Cannot do this in _input because it needs to be checked every frame
@@ -254,7 +255,8 @@ func sound():
 		PlayerState.FALLING:
 			pass
 		PlayerState.CLIMBING:
-			pass
+			if !$Climbing.is_playing():
+				$Climbing.play()
 	
 		
 func start_coyote_timer():

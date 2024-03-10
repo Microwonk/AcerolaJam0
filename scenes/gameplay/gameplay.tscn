@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://udvvfv7li3or" path="res://scenes/gameplay/level.tscn" id="3_h6r5k"]
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pauselayer/pauselayer.tscn" id="3_jw37y"]
 [ext_resource type="PackedScene" uid="uid://b0lhb0ulxkuyf" path="res://scenes/player/player.tscn" id="4_i7jtx"]
-[ext_resource type="PackedScene" uid="uid://h4w7o8n67aqc" path="res://scenes/celestial_aberration/celestial_aberration.tscn" id="5_ltuec"]
+[ext_resource type="PackedScene" uid="uid://h4w7o8n67aqc" path="res://scenes/celestial_aberrant/celestial_aberrant.tscn" id="5_ltuec"]
 [ext_resource type="Shader" path="res://assets/shaders/CRT.gdshader" id="6_o52xc"]
 [ext_resource type="Texture2D" uid="uid://bab2euxhn777p" path="res://assets/sprites/Celestial_Aberrant_Pieces.png" id="7_14pew"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_rcj2f"]
@@ -36,6 +36,9 @@ position = Vector2(76, 571)
 [node name="CATrickster" parent="." instance=ExtResource("5_ltuec")]
 position = Vector2(633, -65)
 scale = Vector2(-1, 1)
+move_speed = 60.0
+body_offset = 25.0
+max_follow_distance = 700.0
 
 [node name="CAHoleRight" parent="." instance=ExtResource("5_ltuec")]
 position = Vector2(2941, 125)
@@ -47,11 +50,14 @@ scale = Vector2(-1, 1)
 
 [node name="CASecret" parent="." instance=ExtResource("5_ltuec")]
 position = Vector2(2876, 366)
+move_speed = 30.0
+max_follow_distance = 600.0
 
-[node name="CAFast" parent="." instance=ExtResource("5_ltuec")]
+[node name="CAMain" parent="." instance=ExtResource("5_ltuec")]
 position = Vector2(1148, 340)
 scale = Vector2(-1, 1)
-move_speed = 40.0
+move_speed = 50.0
+max_follow_distance = 400.0
 
 [node name="CAStalker" type="Node2D" parent="."]
 position = Vector2(1184, 552)

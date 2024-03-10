@@ -1,0 +1,146 @@
+[gd_scene load_steps=13 format=3 uid="uid://4fyoq8npekf0"]
+
+[ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="1_dh8hj"]
+[ext_resource type="PackedScene" uid="uid://by3obw3cqucjc" path="res://scenes/gameplay/death_screen/deathscreen.tscn" id="2_8sj70"]
+[ext_resource type="PackedScene" uid="uid://udvvfv7li3or" path="res://scenes/gameplay/level.tscn" id="3_h6r5k"]
+[ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pauselayer/pauselayer.tscn" id="3_jw37y"]
+[ext_resource type="PackedScene" uid="uid://b0lhb0ulxkuyf" path="res://scenes/player/player.tscn" id="4_i7jtx"]
+[ext_resource type="PackedScene" uid="uid://h4w7o8n67aqc" path="res://scenes/celestial_aberration/celestial_aberration.tscn" id="5_ltuec"]
+[ext_resource type="Shader" path="res://assets/shaders/CRT.gdshader" id="6_o52xc"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_rcj2f"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2D.gd" id="8_pw47b"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="9_6cml5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0vykn"]
+shader = ExtResource("6_o52xc")
+
+[sub_resource type="Resource" id="Resource_bxgfk"]
+script = ExtResource("9_6cml5")
+duration = 1.0
+transition = 0
+ease = 2
+
+[node name="Gameplay" type="Node"]
+script = ExtResource("1_dh8hj")
+
+[node name="Deathscreen" parent="." instance=ExtResource("2_8sj70")]
+
+[node name="PauseLayer" parent="." instance=ExtResource("3_jw37y")]
+
+[node name="Level" parent="." instance=ExtResource("3_h6r5k")]
+
+[node name="Player" parent="." instance=ExtResource("4_i7jtx")]
+position = Vector2(76, 571)
+
+[node name="CATrickster" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(633, -65)
+scale = Vector2(-1, 1)
+move_speed = 20.0
+body_offset = 30.0
+lerp_factor_flip = 0.05
+lerp_factor_body = 0.01
+lerp_factor_head = 0.3
+max_follow_distance = 500.0
+
+[node name="CAHoleRight" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(2941, 125)
+scale = Vector2(-1, 1)
+move_speed = 20.0
+body_offset = 30.0
+lerp_factor_flip = 0.05
+lerp_factor_body = 0.01
+lerp_factor_head = 0.3
+max_follow_distance = 500.0
+
+[node name="CAHoleLeft" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(2523, 115)
+scale = Vector2(-1, 1)
+move_speed = 20.0
+body_offset = 30.0
+lerp_factor_flip = 0.05
+lerp_factor_body = 0.01
+lerp_factor_head = 0.3
+max_follow_distance = 500.0
+
+[node name="CASecret" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(2876, 366)
+move_speed = 20.0
+body_offset = 30.0
+lerp_factor_flip = 0.05
+lerp_factor_body = 0.01
+lerp_factor_head = 0.3
+max_follow_distance = 500.0
+
+[node name="CAFast" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(1148, 340)
+scale = Vector2(-1, 1)
+move_speed = 40.0
+body_offset = 30.0
+lerp_factor_flip = 0.05
+lerp_factor_body = 0.01
+lerp_factor_head = 0.3
+max_follow_distance = 500.0
+
+[node name="CAStalker" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(1206, 564)
+move_speed = 2.0
+body_offset = 30.0
+lerp_factor_flip = 0.05
+lerp_factor_body = 0.01
+lerp_factor_head = 0.3
+max_follow_distance = 500.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(76, 541)
+zoom = Vector2(2, 2)
+limit_smoothed = true
+position_smoothing_speed = 5.2
+editor_draw_limits = true
+
+[node name="ColorRect" type="ColorRect" parent="Camera2D"]
+material = SubResource("ShaderMaterial_0vykn")
+clip_contents = true
+custom_minimum_size = Vector2(1280, 720)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PhantomCameraHost" type="Node" parent="Camera2D"]
+script = ExtResource("7_rcj2f")
+
+[node name="PhantomCamera2D" type="Node2D" parent="."]
+position = Vector2(76, 541)
+script = ExtResource("8_pw47b")
+priority_override = false
+priority = 5
+zoom = Vector2(2, 2)
+follow_mode = 2
+follow_target = NodePath("../Player")
+follow_parameters/target_offset = Vector2(0, -30)
+follow_parameters/damping = true
+follow_parameters/damping_value = 100.0
+frame_preview = true
+pixel_perfect = true
+limit/draw_limits = true
+limit/left = -10000000
+limit/top = -10000000
+limit/right = 10000000
+limit/bottom = 10000000
+limit/limit_node_target = NodePath("")
+limit/smoothed = false
+tween_parameters = SubResource("Resource_bxgfk")
+tween_on_load = true
+inactive_update_mode = 0
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+z_index = 1
+position = Vector2(-482, -327)
+color = Color(0, 0, 0, 1)
+
+[connection signal="died" from="Player" to="Deathscreen" method="_on_player_died"]
