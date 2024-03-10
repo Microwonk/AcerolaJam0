@@ -18,7 +18,9 @@ var last_event
 func _unhandled_input(event):
 	if last_event and last_event.is_action_pressed("num1") and event.is_action_pressed("num2") and Globals.phantom_dead:
 		get_tree().paused = false
-		$MarginContainer/Control/CenterContainer/Label.text = "SACRFICED?"
+		$MarginContainer/Control/CenterContainer/Label.text = "S#C0BC8X?"
+		$"MarginContainer/Control/VBoxOptions/Try again".text = "T0X?=AIN"
+		$MarginContainer/Control/VBoxOptions/MainMenu.text = "_IN0ENU1"
 		$Background.visible = false
 		$PhantomDeath.visible = true
 		$Static.play()
