@@ -111,27 +111,20 @@ theme_type_variation = &"LabelSmall"
 theme_override_colors/font_color = Color(0.92549, 0.92549, 0.92549, 1)
 theme_override_fonts/font = ExtResource("2_5uopj")
 theme_override_font_sizes/font_size = 50
-text = "See Controls and Story below (itch.io Page) playing in fullscreen is advised."
+text = "SEE CONTROLS AND STORY BELOW (ITCH.IO PAGE) PLAYING IN FULLSCREEN IS ADVISED."
 
 [node name="Credits" type="VBoxContainer" parent="MarginContainer/Control"]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -86.0
-offset_top = -23.0
-grow_horizontal = 0
-grow_vertical = 0
+offset_right = 305.0
+offset_bottom = 34.0
 
 [node name="MadeByLabel" type="Label" parent="MarginContainer/Control/Credits"]
 layout_mode = 2
 theme_type_variation = &"LabelSmall"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("2_5uopj")
-theme_override_font_sizes/font_size = 35
-text = "made by microwonk"
+theme_override_font_sizes/font_size = 50
+text = "MADE BY MICROWONK"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_dkml3")
