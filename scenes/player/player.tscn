@@ -38,18 +38,18 @@ texture_scale = 2.0
 
 [node name="Flashlight" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_xpoyx")
-volume_db = -24.0
+volume_db = -10.0
 pitch_scale = 1.2
 attenuation = 0.189465
 
 [node name="FootSteps" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_k4qvb")
-volume_db = -20.0
+volume_db = -10.0
 pitch_scale = 2.4
 
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_agp3b")
-volume_db = -30.0
+volume_db = -10.0
 
 [node name="DeathParticles" type="CPUParticles2D" parent="."]
 emitting = false
@@ -66,5 +66,5 @@ hue_variation_curve = SubResource("Curve_46aex")
 
 [node name="Climbing" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_k4qvb")
-volume_db = -20.0
+volume_db = -10.0
 pitch_scale = 4.0

@@ -28,10 +28,12 @@ func _unhandled_input(event):
 	last_event = event	
 
 func again():
+	$UI.play()
 	$Death.stop()
 	Game.change_scene_to_file("res://scenes/gameplay/gameplay.tscn", {"show_progress_bar": false})
 
 func _on_main_menu_pressed():
+	$UI.play()
 	$Death.stop()
 	Game.change_scene_to_file("res://scenes/menu/menu.tscn", {"show_progress_bar": false})
 

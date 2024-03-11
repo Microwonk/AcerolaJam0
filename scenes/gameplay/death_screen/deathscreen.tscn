@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://by3obw3cqucjc"]
+[gd_scene load_steps=8 format=3 uid="uid://by3obw3cqucjc"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/death_screen/deathscreen.gd" id="1_7oarg"]
 [ext_resource type="FontFile" uid="uid://c10t8b5fip0p8" path="res://assets/fonts/MinimalPixelFont.ttf" id="2_2rkwy"]
 [ext_resource type="Shader" path="res://assets/shaders/glitch.gdshader" id="2_5nolm"]
 [ext_resource type="AudioStream" uid="uid://6eiiiwypcvuv" path="res://assets/sound/death.wav" id="3_8uiii"]
 [ext_resource type="AudioStream" uid="uid://bl4ekhmqjacj3" path="res://assets/sound/clicking.wav" id="5_ln3qj"]
+[ext_resource type="AudioStream" uid="uid://bnfojxua8st5g" path="res://assets/sound/ui.wav" id="6_ktbmj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_scjub"]
 shader = ExtResource("2_5nolm")
@@ -57,7 +58,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_2rkwy")
 theme_override_font_sizes/font_size = 200
-text = "SACRIFICED"
+text = "SACRIFICIUM"
 
 [node name="VBoxOptions" type="VBoxContainer" parent="MarginContainer/Control"]
 layout_mode = 1
@@ -98,8 +99,13 @@ volume_db = 10.0
 
 [node name="Static" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ln3qj")
-volume_db = -30.0
+volume_db = -20.0
 pitch_scale = 0.07
+
+[node name="UI" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_ktbmj")
+volume_db = -10.0
+pitch_scale = 4.0
 
 [connection signal="pressed" from="MarginContainer/Control/VBoxOptions/Try again" to="." method="_on_try_again_pressed"]
 [connection signal="pressed" from="MarginContainer/Control/VBoxOptions/MainMenu" to="." method="_on_main_menu_pressed"]

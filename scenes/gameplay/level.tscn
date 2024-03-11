@@ -105,7 +105,6 @@ shape = SubResource("RectangleShape2D_te1jp")
 [node name="Explosion" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(823, -23)
 stream = ExtResource("9_w5k5a")
-volume_db = -10.0
 
 [node name="SecretWin" type="Area2D" parent="."]
 position = Vector2(4798, 678)
@@ -123,10 +122,10 @@ texture_scale = 4.57
 [node name="TunnelSound" type="AudioStreamPlayer2D" parent="TunnelLight"]
 position = Vector2(-82, 0)
 stream = ExtResource("6_xjo3t")
-volume_db = -20.0
 pitch_scale = 0.1
 autoplay = true
-max_distance = 1500.0
+stream_paused = true
+max_distance = 1300.0
 
 [connection signal="body_entered" from="Chain1" to="." method="_on_chain_body_entered"]
 [connection signal="body_exited" from="Chain1" to="." method="_on_chain_body_exited"]

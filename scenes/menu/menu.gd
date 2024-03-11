@@ -11,11 +11,14 @@ func _ready():
 
 
 func _on_PlayButton_pressed() -> void:
+	$UI.play()
+	await get_tree().create_timer(0.3).timeout	
 	$AudioStreamPlayer.stop()
 	Game.change_scene_to_file("res://scenes/intro/intro.tscn")
 
 
 func _on_ExitButton_pressed() -> void:
+	$UI.play()
 	# gently shutdown the game
 	var transitions = get_node_or_null("/root/Transitions")
 	if transitions:

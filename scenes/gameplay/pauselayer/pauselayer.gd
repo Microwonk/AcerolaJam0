@@ -47,10 +47,13 @@ func pause_game():
 	pause_show()
 
 func _on_Resume_pressed():
+	$UI.play()
 	resume()
 
 func _on_PauseButton_pressed():
+	$UI.play()
 	pause_game()
 
 func _on_main_menu_pressed():
+	$UI.play()
 	Game.change_scene_to_file("res://scenes/menu/menu.tscn", {"show_progress_bar": false})

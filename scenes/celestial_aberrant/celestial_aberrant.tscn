@@ -36,7 +36,7 @@ target_position = Vector2(-20, 0)
 [node name="Noises" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(-15, 7)
 stream = ExtResource("2_a7qo0")
-volume_db = -30.0
+volume_db = -20.0
 autoplay = true
 max_distance = 500.0
 
@@ -109,7 +109,7 @@ region_enabled = true
 region_rect = Rect2(50.4037, 81.5392, 15.2697, 14.7292)
 
 [node name="Lower" type="Sprite2D" parent="parts/LegB"]
-position = Vector2(6.75647, 10.6719)
+position = Vector2(6.75646, 10.6719)
 rotation = -0.254754
 scale = Vector2(0.999996, 0.999996)
 texture = ExtResource("2_rt3wt")
