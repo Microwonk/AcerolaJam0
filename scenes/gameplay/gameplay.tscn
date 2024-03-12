@@ -53,6 +53,10 @@ position = Vector2(2876, 366)
 move_speed = 30.0
 max_follow_distance = 600.0
 
+[node name="CAIntro" parent="." instance=ExtResource("5_ltuec")]
+position = Vector2(1375, 838)
+max_follow_distance = 400.0
+
 [node name="CAMain" parent="." instance=ExtResource("5_ltuec")]
 position = Vector2(1148, 340)
 scale = Vector2(-1, 1)
